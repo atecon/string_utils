@@ -1,0 +1,90 @@
+Help text for the string_utils.gfn package by Artur Tarassow.
+
+Email: atecon@posteo.de (please ask questions and report bugs on the gretl mailing list if possible).
+
+Source code and tests: https://github.com/atecon/string_utils
+
+
+This package is a collection of helper functions for various operations of string variables and string arrays which are not covered by gretl's built-in methods (yet).
+
+
+Public functions:
+-----------------
+
+strdrop():
+Drop a specific string 'drop_str' from string array 'S'. String 'drop_str' may occur multiple times.
+----------
+Arguments:
+S 		 - string array
+drop_str - string, pattern of string value to be droppped from S
+
+Return:
+Return string array excluding string 'drop_str' if present in S. Of 'drop_str' is not present, the original array 'S' is returned. If string array 'S' or string 'search_pattern' are not valid, an empty string array is returned.
+
+
+strpos():
+Determine the positions of a string in string array S.
+----------
+Arguments:
+S 				- string array
+search_pattern	- string, pattern of string entry to be searched in S
+
+Return:
+Returns the positional entr(y)ies of string 'search_patter' in a column vector if present in string array 'S', 1x1 zero-matrix otherwise. If string array 'S' or string 'search_pattern' are not valid, a 1x1 zero-matrix is returned.
+
+
+struniq():
+Get the unique string values of string array S.
+----------
+Arguments:
+S 		- string array
+
+Return:
+Array containing the distinct elements of array S not sorted but in their order of appearance. If string array 'S' is not valid, an empty array is returned.
+
+
+strrepl():
+Copy string n-times into a string array of length n.
+----------
+Arguments:
+str		- string
+n 	 	- int
+
+Return:
+Array containing string 'str' n-times. If string is not valid, an empty array is returned.
+
+
+msortby_rowlabels():
+Sort rows of matrix X by re-ordering row-labels of X by string array 'rowlabels_new'. 
+----------
+Arguments:
+X 				- matrix, must include row-labels set by rnameset()
+rowlabels_new	- string array, re-order X' row-labels by this string
+
+Return:
+Matrix with sorted rows of X by 'rowlabels_new'. X must have row-labels. Also all elements in 'rowlabels_new' must be present in X' row-labels too, otherwise a 1x1 zero-matrix is returned.
+
+
+valid_string():
+Checks length of a string.
+----------
+Arguments:
+s 		- string, variable being checked
+
+Return:
+If 's' is at least of length 1 return scalar of 1, otherwise 0.
+
+
+valid_strarray():
+Checks length of a string array.
+----------
+Arguments:
+S 		- string array, variable being checked
+
+Return:
+If 'S' is at least of length 1 return scalar of 1, otherwise 0.
+
+
+Changelog:
+- 0.1, December 2019:
+    initial release

@@ -1,0 +1,180 @@
+function scalar valid_string (const string S)
+    /* Check length of string*/
+
+    if strlen(S) == 0
+        return 0
+    else
+        return 1
+    endif
+end function
+
+
+function scalar valid_strarray (const strings S)
+    /* Check length of string array. */
+
+    if nelem(S) == 0
+        return 0
+    else
+        return 1
+    endif
+end function
+
+
+function strings strdrop (const strings S, const string drop_str)
+    /* Drop a specific string from string array. String may occur multiple times. */
+
+    strings ret = array(0)
+
+    if valid_string(drop_str) && valid_strarray(S)
+        loop i=1..nelem(S) -q
+            if S[i] != drop_str
+                ret += S[i]
+            endif
+        endloop
+    else
+        return S
+    endif
+
+    return ret
+end function
+
+
+function matrix strpos (const strings S "Array of strings",
+                        const string search_pattern "String being searched for in S")
+    # Returns the positional entries of string in S in a column vector
+    # if S contains string, 0 otherwise.
+
+    matrix ret = {}
+
+    if valid_string(search_pattern) && valid_strarray(S)
+        loop i=1..nelem(S) -q
+            if S[i] == search_pattern
+                ret |= $i
+            endif
+        endloop
+
+        if rows(ret) > 0
+            return ret
+        else
+            return {0}
+        endif
+    else
+        return {0}
+    endif
+end function
+
+
+function strings struniq (const strings S)
+/* Returns an array containing the distinct elements
+    of S not sorted but in their order of appearance. */
+
+    strings suniq = array(0)
+
+    if valid_strarray(S)
+        strings suniq = defarray(S[1])
+        loop i=2..nelem(S) -q
+            if strpos(suniq, S[i]) == 0		# TODO: What about empty strings?
+                suniq += S[i]
+            endif
+        endloop
+    endif
+
+    return suniq
+end function
+
+
+function strings strrepl (const string str, const int times[1::])
+/* Construct string array holding a constant string
+   n times. May be needed for constructing a series with a constant
+    string value by means of stringify(). */
+
+    strings S = array(0)
+
+    if valid_string(str)
+        strings S = array(times)
+        loop i=1..times -q
+            S[i] = str
+        endloop
+    endif
+
+    return S
+end function
+
+function matrix msortby_rowlabels (const matrix X,
+                                   strings rowlabels_new "String array to be re-ordered")
+    /* Read out current string array of row-labels of matrix X. Re-order
+    rows of X according to string array 'rowlabels_new'.
+    
+    The array 'rowlabels_new' must be of the same length as X has rows.
+    All elements in 'rowlabels_new' must also be included in X' row
+    names, otherwise a 1x1 zero-matrix is returned. */
+
+    matrix ret = {0}
+    strings rnames = rnameget(X)
+
+    if !valid_strarray(rowlabels_new) || !valid_strarray(rnames)
+        return ret
+    endif
+    if (nelem(struniq(rowlabels_new)) != nelem(rowlabels_new))
+        return ret
+    endif
+    if nelem(rowlabels_new) != rows(X)
+        return ret
+    endif
+
+    matrix ret = zeros(rows(X),cols(X))
+   
+    loop i=1..nelem(rowlabels_new) -q        
+        scalar pos = strpos(rnames, rowlabels_new[i])
+        if pos != 0
+            ret[pos,] = X[i,]
+        else
+            return {0}
+        endif
+    endloop
+
+    rnameset(ret, rowlabels_new)
+
+    return ret
+end function
+
+
+
+
+# TODO: Not yet implemented -- works only if "to_num = 1"
+/*
+function series replace_strval (const series s,
+                                const string search_pattern,
+                                const string repl_pattern,
+                                const bool to_num[1])
+#    Replace string values of a series, and optionally cast
+#    result to numerical value of possible.
+
+    scalar T = nobs(s)
+    series ret = NA
+
+    if T == 0 || nelem(strvals(s)) == 0
+        print "foo"
+        return ret
+    else
+
+        if valid_string(search_pattern) && valid_string(repl_pattern)
+            print "huhu"
+            
+              loop i=1..T -q
+                  string str = regsub(s[i], search_pattern, repl_pattern)
+                if to_num
+                    catch series ret[i] = atof(str)
+                else
+                    stop
+                    series ret[i] = str
+                endif
+            endloop
+        endif
+
+        return ret
+    endif
+end function
+*/
+
+

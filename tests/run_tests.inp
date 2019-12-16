@@ -1,0 +1,219 @@
+set verbose off
+clear
+
+string WD = "/home/at/git/string_utils"
+
+set workdir @WD
+include "./src/string_utils.inp" --force
+
+
+if valid_string("") != 0
+    stop
+endif
+if valid_string("A B U&P") != 1
+    stop
+endif
+if valid_string("*_") != 1
+    stop
+endif
+
+
+
+strings S = defarray("ABU Kko*&(", "C?`=/$%&")
+if valid_strarray(S) != 1
+    stop
+endif
+if valid_strarray(defarray("")) != 1
+    stop
+endif
+strings S = array(0)
+if valid_strarray(S) != 0
+    stop
+endif
+
+
+
+strings S = defarray("ABU Kko*&(", "C?`=/$%&")
+string sdrop = "C?`=/$%&"
+if nelem(strdrop(S, sdrop)) != 1
+    stop
+endif
+if strdrop(S, sdrop)[1] != "ABU Kko*&("
+    stop
+endif
+string sdrop = "ABU Kko*&("
+if nelem(strdrop(S, sdrop)) != 1
+    stop
+endif
+if strdrop(S, sdrop)[1] != "C?`=/$%&"
+    stop
+endif
+
+strings S = defarray("A", "AB", "AB")
+string sdrop = "A"
+if nelem(strdrop(S, sdrop)) != 2
+    stop
+endif
+if strdrop(S, sdrop)[1] != "AB" || strdrop(S, sdrop)[2] != "AB"
+    stop
+endif
+
+strings S = defarray("A", "AB", "AB")
+string sdrop = "AB"
+if nelem(strdrop(S, sdrop)) != 1
+    stop
+endif
+if strdrop(S, sdrop)[1] != "A"
+    stop
+endif
+
+strings S = defarray("A", "B", "C")
+string sdrop = "D"
+if nelem(strdrop(S, sdrop)) != 3
+    stop
+endif
+if strdrop(S, sdrop)[1] != "A" || strdrop(S, sdrop)[2] != "B" || strdrop(S, sdrop)[3] != "C"
+    stop
+endif
+
+
+strings S = defarray("ABU Kko*&(", "C ?`=/$%&", "", " ")
+string search = "ABU Kko*&("
+if strpos(S, search) != 1
+    stop
+endif
+string search = "C ?`=/$%&"
+if strpos(S, search) != 2
+    stop
+endif
+string search = ""
+if strpos(S, search) != 0
+    stop
+endif
+string search = " "
+if strpos(S, search) != 4
+    stop
+endif
+string search = "ABC"
+if strpos(S, search) != 0
+    stop
+endif
+
+strings S = defarray("A", "B", "A")
+string search = "A"
+if strpos(S, search)[1] != 1 || strpos(S, search)[2] != 3
+    stop
+endif
+
+
+strings S = defarray("R1", "R2", "R3")
+strings Suniq = struniq(S)
+if nelem(Suniq) != 3
+    stop
+endif
+if Suniq[1] != "R1" || Suniq[2] != "R2" || Suniq[3] != "R3"
+    stop
+endif
+
+strings S = defarray("R1", "R2", "R3", "R-1", "R2", "A", "A", "C")
+strings Suniq = struniq(S)
+if nelem(Suniq) != 6
+    stop
+endif
+if Suniq[1] != "R1" || Suniq[2] != "R2" || Suniq[3] != "R3" \
+  || Suniq[4] != "R-1" || Suniq[5] != "A" || Suniq[6] != "C"
+    stop
+endif
+
+
+
+string str = "ABC DH7*!_"
+scalar n = 3
+strings S = strrepl(str, n)
+if nelem(S) != n
+    stop
+endif
+loop i=1..nelem(S) -q
+    if S[i] != str
+        stop
+    endif
+endloop
+
+string str = ""
+strings S = strrepl(str, n)
+if nelem(S) != 0
+    stop
+endif
+
+
+matrix M = mshape(seq(1,9), 3, 3)
+strings Snew = defarray("C", "A", "B")
+strings S = defarray("A", "B", "C")
+if msortby_rowlabels(M, Snew) != 0 || rows(M) != 3 || cols(M) != 3
+    stop
+endif
+
+rnameset(M, S)
+matrix Mnew = msortby_rowlabels(M, Snew)
+strings row_names = rnameget(Mnew)
+if nelem(row_names) != 3
+    stop
+endif
+if row_names[1] != "C" || row_names[2] != "A" || row_names[3] != "B"
+    stop
+endif
+if sumr(Mnew)[1] != 15 && sumr(Mnew)[2] != 18 && sumr(Mnew)[3] != 21
+    stop
+endif
+
+strings Snew = defarray("C", "A", "B")
+strings S = defarray("A ", "B", "C")
+rnameset(M, S)
+matrix Mnew = msortby_rowlabels(M, Snew)
+if msortby_rowlabels(M, Snew) != 0 || rows(M) != 3 || cols(M) != 3
+    stop
+endif
+
+strings Snew = defarray("C", "A", "D")
+strings S = defarray("A", "B", "C")
+rnameset(M, S)
+matrix Mnew = msortby_rowlabels(M, Snew)
+if msortby_rowlabels(M, Snew) != 0 || rows(M) != 3 || cols(M) != 3
+    stop
+endif
+
+strings Snew = defarray("783jdikd_", "A", "B")
+strings S = defarray("A", "B", "783jdikd_")
+rnameset(M, S)
+matrix Mnew = msortby_rowlabels(M, Snew)
+strings row_names = rnameget(Mnew)
+if nelem(row_names) != 3
+    stop
+endif
+if row_names[1] != "783jdikd_" || row_names[2] != "A" || row_names[3] != "B"
+    stop
+endif
+if sumr(Mnew)[1] != 15 && sumr(Mnew)[2] != 18 && sumr(Mnew)[3] != 21
+    stop
+endif
+
+
+
+
+# TODO: Not yet implemented -- works only if "to_num = 1"	
+/*
+   nulldata 4
+   strings dates = defarray("2019-01-01", "2019-01-02", "20190103", "2019/01/02")
+   series Date = time
+   stringify(Date, dates)
+   print Date -o
+
+   series NumDate = replace_series_string_values(Date, "\W", "")		# '\W' replace all non-numeric chars
+   print Date NumDate -o
+*/
+
+
+
+
+
+print "Tests passed!"

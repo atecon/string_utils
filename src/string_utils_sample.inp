@@ -1,0 +1,34 @@
+clear
+set verbose off
+
+include string_utils.gfn
+
+
+string str = "hello world"
+eval valid_string(str)
+
+strings S = defarray("A", "B")
+eval valid_strarray(S)
+
+strings S = defarray("A", "B")
+string drop = "B"
+eval strdrop(S, drop)
+
+strings S = defarray("A", "B", "C", "B")
+string search = "B"
+eval strpos(S, search)
+
+strings S = defarray("A", "B", "C", "B")
+eval struniq(S)
+
+string str = "AB"
+eval strrepl(str, 3)
+
+matrix m = mshape(seq(1,4),2,2)
+rnameset(m, "R1 R2")
+strings rnames_new = defarray("R2", "R1")
+eval msortby_rowlabels(m, rnames_new)
+
+
+
+

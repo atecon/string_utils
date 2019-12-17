@@ -4,12 +4,6 @@ set verbose off
 include string_utils.gfn
 
 
-string str = "hello world"
-eval valid_string(str)
-
-strings S = defarray("A", "B")
-eval valid_strarray(S)
-
 strings S = defarray("A", "B")
 string drop = "B"
 eval strdrop(S, drop)

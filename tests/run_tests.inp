@@ -7,31 +7,6 @@ set workdir @WD
 include "./src/string_utils.inp" --force
 
 
-if valid_string("") != 0
-    stop
-endif
-if valid_string("A B U&P") != 1
-    stop
-endif
-if valid_string("*_") != 1
-    stop
-endif
-
-
-
-strings S = defarray("ABU Kko*&(", "C?`=/$%&")
-if valid_strarray(S) != 1
-    stop
-endif
-if valid_strarray(defarray("")) != 1
-    stop
-endif
-strings S = array(0)
-if valid_strarray(S) != 0
-    stop
-endif
-
-
 
 strings S = defarray("ABU Kko*&(", "C?`=/$%&")
 string sdrop = "C?`=/$%&"

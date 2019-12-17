@@ -3,7 +3,7 @@
 <gretl-function-package name="string_utils" no-data-ok="true" minver="2018a">
 <author email="atecon@posteo.de">Artur Tarassow</author>
 <version>0.1</version>
-<date>2019-12-16</date>
+<date>2019-12-17</date>
 <description>Helper functions for string operations</description>
 <tags>C81</tags>
 <help>
@@ -74,54 +74,10 @@ Return:
 Matrix with sorted rows of X by 'rowlabels_new'. X must have row-labels. Also all elements in 'rowlabels_new' must be present in X' row-labels too, otherwise a 1x1 zero-matrix is returned.
 
 
-valid_string():
-Checks length of a string.
-----------
-Arguments:
-s 		- string, variable being checked
-
-Return:
-If 's' is at least of length 1 return scalar of 1, otherwise 0.
-
-
-valid_strarray():
-Checks length of a string array.
-----------
-Arguments:
-S 		- string array, variable being checked
-
-Return:
-If 'S' is at least of length 1 return scalar of 1, otherwise 0.
-
-
 Changelog:
 - 0.1, December 2019:
     initial release
 </help>
-<gretl-function name="valid_string" type="scalar">
- <params count="1">
-  <param name="S" type="string" const="true"/>
- </params>
-<code>/* Check length of string*/
-if strlen(S) == 0
-  return 0
-else
-  return 1
-endif
-</code>
-</gretl-function>
-<gretl-function name="valid_strarray" type="scalar">
- <params count="1">
-  <param name="S" type="strings" const="true"/>
- </params>
-<code>/* Check length of string array. */
-if nelem(S) == 0
-  return 0
-else
-  return 1
-endif
-</code>
-</gretl-function>
 <gretl-function name="strdrop" type="strings">
  <params count="2">
   <param name="S" type="strings" const="true"/>
@@ -129,7 +85,7 @@ endif
  </params>
 <code>/* Drop a specific string from string array. String may occur multiple times. */
 strings ret = array(0)
-if valid_string(drop_str) &amp;&amp; valid_strarray(S)
+if strlen(drop_str) &amp;&amp; nelem(S)
   loop i=1..nelem(S) -q
     if S[i] != drop_str
       ret += S[i]
@@ -153,7 +109,7 @@ return ret
 <code># Returns the positional entries of string in S in a column vector
 # if S contains string, 0 otherwise.
 matrix ret = {}
-if valid_string(search_pattern) &amp;&amp; valid_strarray(S)
+if strlen(search_pattern) &amp;&amp; nelem(S)
   loop i=1..nelem(S) -q
     if S[i] == search_pattern
       ret |= $i
@@ -176,7 +132,7 @@ endif
 <code>/* Returns an array containing the distinct elements
 of S not sorted but in their order of appearance. */
 strings suniq = array(0)
-if valid_strarray(S)
+if nelem(S)
   strings suniq = defarray(S[1])
   loop i=2..nelem(S) -q
     if strpos(suniq, S[i]) == 0		# TODO: What about empty strings?
@@ -190,15 +146,13 @@ return suniq
 <gretl-function name="strrepl" type="strings">
  <params count="2">
   <param name="str" type="string" const="true"/>
-  <param name="times" type="int" min="1" const="true"/>
+  <param name="n" type="int" min="1" const="true"/>
  </params>
-<code>/* Construct string array holding a constant string
-n times. May be needed for constructing a series with a constant
-string value by means of stringify(). */
+<code>/* Construct string array holding a constant string n times. */
 strings S = array(0)
-if valid_string(str)
-  strings S = array(times)
-  loop i=1..times -q
+if strlen(str)
+  strings S = array(n)
+  loop i=1..n -q
     S[i] = str
   endloop
 endif
@@ -219,7 +173,7 @@ All elements in 'rowlabels_new' must also be included in X' row
 names, otherwise a 1x1 zero-matrix is returned. */
 matrix ret = {0}
 strings rnames = rnameget(X)
-if !valid_strarray(rowlabels_new) || !valid_strarray(rnames)
+if !nelem(rowlabels_new) || !nelem(rnames)
   return ret
 endif
 if (nelem(struniq(rowlabels_new)) != nelem(rowlabels_new))
@@ -247,12 +201,6 @@ set verbose off
 
 include string_utils.gfn
 
-
-string str = &quot;hello world&quot;
-eval valid_string(str)
-
-strings S = defarray(&quot;A&quot;, &quot;B&quot;)
-eval valid_strarray(S)
 
 strings S = defarray(&quot;A&quot;, &quot;B&quot;)
 string drop = &quot;B&quot;

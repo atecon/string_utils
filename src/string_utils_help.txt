@@ -15,11 +15,11 @@ strdrop():
 Drop a specific string 'drop_str' from string array 'S'. String 'drop_str' may occur multiple times.
 ----------
 Arguments:
-S 		 - string array
-drop_str - string, pattern of string value to be droppped from S
+S 		- string array
+drop_str 	- string, pattern of string value to be droppped from S
 
 Return:
-Return string array excluding string 'drop_str' if present in S. Of 'drop_str' is not present, the original array 'S' is returned. If string array 'S' or string 'search_pattern' are not valid, an empty string array is returned.
+Return string array excluding string 'drop_str' if present in S. If 'drop_str' is not present, the original array 'S' is returned instead. If string array 'S' has length zero, an empty array is returned.
 
 
 strpos():
@@ -40,7 +40,7 @@ Arguments:
 S 		- string array
 
 Return:
-Array containing the distinct elements of array S not sorted but in their order of appearance. If string array 'S' is not valid, an empty array is returned.
+Array containing the distinct elements of array S not sorted but in their order of appearance. If string array 'S' is not valid, an empty array is returned. It at least one string element is of length zero, an empty string array is returned.
 
 
 strrepl():

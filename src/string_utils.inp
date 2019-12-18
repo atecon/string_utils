@@ -3,14 +3,16 @@ function strings strdrop (const strings S, const string drop_str)
 
     strings ret = array(0)
 
-    if strlen(drop_str) && nelem(S)
+    if strlen(drop_str) == 0
+        return S
+    elif nelem(S) == 0
+        return ret
+    else
         loop i=1..nelem(S) -q
             if S[i] != drop_str
                 ret += S[i]
             endif
         endloop
-    else
-        return S
     endif
 
     return ret
@@ -20,7 +22,7 @@ end function
 function matrix strpos (const strings S "Array of strings",
                         const string search_pattern "String being searched for in S")
     # Returns the positional entries of string in S in a column vector
-    # if S contains string, 0 otherwise.
+    # if S contains the string, 0 otherwise.
 
     matrix ret = {}
 
@@ -44,17 +46,30 @@ end function
 
 function strings struniq (const strings S)
 /* Returns an array containing the distinct elements
-    of S not sorted but in their order of appearance. */
+   of S not sorted but in their order of appearance. Fails in case
+    at least one element is an empty string. */
 
     strings suniq = array(0)
+    scalar error = 0
 
-    if nelem(S)
+    if nelem(S) > 0 && strlen(S[1]) > 0
         strings suniq = defarray(S[1])
+
         loop i=2..nelem(S) -q
-            if strpos(suniq, S[i]) == 0		# TODO: What about empty strings?
+            if strlen(S[i]) == 0
+                error++
+                break
+            endif
+            if strpos(suniq, S[i]) == 0
                 suniq += S[i]
             endif
         endloop
+        /*
+           if error
+           printf "\nWarning: At least one element in string array has length zero. Not allowed.\n"
+           return array(0)
+           endif
+        */
     endif
 
     return suniq

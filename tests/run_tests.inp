@@ -7,7 +7,7 @@ set workdir @WD
 include "./src/string_utils.inp" --force
 
 
-
+print "Start with sdrop()"
 strings S = defarray("ABU Kko*&(", "C?`=/$%&")
 string sdrop = "C?`=/$%&"
 if nelem(strdrop(S, sdrop)) != 1
@@ -51,7 +51,30 @@ if strdrop(S, sdrop)[1] != "A" || strdrop(S, sdrop)[2] != "B" || strdrop(S, sdro
     stop
 endif
 
+strings S = defarray("A", "B", "C")
+string sdrop = ""
+if nelem(strdrop(S, sdrop)) != 3
+    stop
+endif
+if strdrop(S, sdrop)[1] != "A" || strdrop(S, sdrop)[2] != "B" || strdrop(S, sdrop)[3] != "C"
+    stop
+endif
 
+strings S = array(0)
+string sdrop = ""
+if nelem(strdrop(S, sdrop)) != 0
+    stop
+endif
+
+strings S = array(0)
+string sdrop = "A"
+if nelem(strdrop(S, sdrop)) != 0
+    stop
+endif
+
+
+
+print "Start with strpos()"
 strings S = defarray("ABU Kko*&(", "C ?`=/$%&", "", " ")
 string search = "ABU Kko*&("
 if strpos(S, search) != 1
@@ -81,6 +104,8 @@ if strpos(S, search)[1] != 1 || strpos(S, search)[2] != 3
 endif
 
 
+
+print "Start with struniq()"
 strings S = defarray("R1", "R2", "R3")
 strings Suniq = struniq(S)
 if nelem(Suniq) != 3
@@ -100,8 +125,22 @@ if Suniq[1] != "R1" || Suniq[2] != "R2" || Suniq[3] != "R3" \
     stop
 endif
 
+strings S = defarray("R1", "R2", "")
+strings Suniq = struniq(S)
+if nelem(Suniq) != 0
+    stop
+endif
+
+strings S = defarray("R1", " ", "")
+strings Suniq = struniq(S)
+if nelem(Suniq) != 0
+    stop
+endif
 
 
+
+
+print "Start with strrepl()"
 string str = "ABC DH7*!_"
 scalar n = 3
 strings S = strrepl(str, n)
@@ -121,6 +160,8 @@ if nelem(S) != 0
 endif
 
 
+
+print "Start with msortby_rowlabels()"
 matrix M = mshape(seq(1,9), 3, 3)
 strings Snew = defarray("C", "A", "B")
 strings S = defarray("A", "B", "C")
@@ -191,4 +232,4 @@ endif
 
 
 
-print "Tests passed!"
+printf "\nTests passed!"

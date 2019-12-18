@@ -13,7 +13,6 @@ Email: atecon@posteo.de (please ask questions and report bugs on the gretl maili
 
 Source code and tests: https://github.com/atecon/string_utils
 
-
 This package is a collection of helper functions for various operations of string variables and string arrays which are not covered by gretl's built-in methods (yet).
 
 
@@ -24,11 +23,11 @@ strdrop():
 Drop a specific string 'drop_str' from string array 'S'. String 'drop_str' may occur multiple times.
 ----------
 Arguments:
-S 		 - string array
-drop_str - string, pattern of string value to be droppped from S
+S 		- string array
+drop_str 	- string, pattern of string value to be droppped from S
 
 Return:
-Return string array excluding string 'drop_str' if present in S. Of 'drop_str' is not present, the original array 'S' is returned. If string array 'S' or string 'search_pattern' are not valid, an empty string array is returned.
+Return string array excluding string 'drop_str' if present in S. If 'drop_str' is not present, the original array 'S' is returned instead. If string array 'S' has length zero, an empty array is returned.
 
 
 strpos():
@@ -39,7 +38,7 @@ S 				- string array
 search_pattern	- string, pattern of string entry to be searched in S
 
 Return:
-Returns the positional entr(y)ies of string 'search_patter' in a column vector if present in string array 'S', 1x1 zero-matrix otherwise. If string array 'S' or string 'search_pattern' are not valid, a 1x1 zero-matrix is returned.
+Returns the positional entr(y)ies of string 'search_pattern' in a column vector if present in string array 'S', otherwise a 1x1 zero-matrix. If either string array 'S' or string 'search_pattern' are of length zero, a 1x1 zero-matrix is returned.
 
 
 struniq():
@@ -49,7 +48,7 @@ Arguments:
 S 		- string array
 
 Return:
-Array containing the distinct elements of array S not sorted but in their order of appearance. If string array 'S' is not valid, an empty array is returned.
+Array containing the distinct elements of array S not sorted but in their order of appearance. If string array 'S' has length zero or at least one string element is of length zero, an empty string array is returned.
 
 
 strrepl():
@@ -60,18 +59,19 @@ str		- string
 n 	 	- int
 
 Return:
-Array containing string 'str' n-times. If string is not valid, an empty array is returned.
+Array containing string 'str' n-times. Also works for an empty string 'str'.
 
 
 msortby_rowlabels():
-Sort rows of matrix X by re-ordering row-labels of X by string array 'rowlabels_new'. 
+Sort rows of matrix X by re-ordering row-labels of X by string array 'rowlabels_new'.
 ----------
 Arguments:
-X 				- matrix, must include row-labels set by rnameset()
+X				- matrix, must include row-labels set by rnameset()
 rowlabels_new	- string array, re-order X' row-labels by this string
 
 Return:
 Matrix with sorted rows of X by 'rowlabels_new'. X must have row-labels. Also all elements in 'rowlabels_new' must be present in X' row-labels too, otherwise a 1x1 zero-matrix is returned.
+
 
 
 Changelog:
@@ -85,14 +85,16 @@ Changelog:
  </params>
 <code>/* Drop a specific string from string array. String may occur multiple times. */
 strings ret = array(0)
-if strlen(drop_str) &amp;&amp; nelem(S)
+if strlen(drop_str) == 0
+  return S
+elif nelem(S) == 0
+  return ret
+else
   loop i=1..nelem(S) -q
     if S[i] != drop_str
       ret += S[i]
     endif
   endloop
-else
-  return S
 endif
 return ret
 </code>
@@ -107,7 +109,7 @@ return ret
   </param>
  </params>
 <code># Returns the positional entries of string in S in a column vector
-# if S contains string, 0 otherwise.
+# if S contains the string, 0 otherwise.
 matrix ret = {}
 if strlen(search_pattern) &amp;&amp; nelem(S)
   loop i=1..nelem(S) -q
@@ -130,15 +132,25 @@ endif
   <param name="S" type="strings" const="true"/>
  </params>
 <code>/* Returns an array containing the distinct elements
-of S not sorted but in their order of appearance. */
+of S not sorted but in their order of appearance. Fails in case
+at least one element is an empty string. */
 strings suniq = array(0)
-if nelem(S)
+scalar error = 0
+if nelem(S) &amp;&amp; strlen(S[1])
   strings suniq = defarray(S[1])
   loop i=2..nelem(S) -q
-    if strpos(suniq, S[i]) == 0		# TODO: What about empty strings?
+    if strlen(S[i]) == 0
+      error++
+      break
+    endif
+    if sum( strpos(suniq, S[i]) ) == 0
       suniq += S[i]
     endif
   endloop
+  if error
+    #printf &quot;\nWarning: At least one element in string array has length zero. Not allowed.\n&quot;
+    return array(0)
+  endif
 endif
 return suniq
 </code>
@@ -149,13 +161,10 @@ return suniq
   <param name="n" type="int" min="1" const="true"/>
  </params>
 <code>/* Construct string array holding a constant string n times. */
-strings S = array(0)
-if strlen(str)
-  strings S = array(n)
-  loop i=1..n -q
-    S[i] = str
-  endloop
-endif
+strings S = array(n)
+loop i=1..n -q
+  S[i] = str
+endloop
 return S
 </code>
 </gretl-function>
@@ -182,7 +191,7 @@ endif
 if nelem(rowlabels_new) != rows(X)
   return ret
 endif
-matrix ret = zeros(rows(X),cols(X))
+matrix ret = zeros(rows(X), cols(X))
 loop i=1..nelem(rowlabels_new) -q
   scalar pos = strpos(rnames, rowlabels_new[i])
   if pos != 0

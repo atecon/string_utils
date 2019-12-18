@@ -131,7 +131,6 @@ if nelem(Suniq) != 0
     stop
 endif
 
-
 strings S = defarray("R1", " ", "")
 strings Suniq = struniq(S)
 if nelem(Suniq) != 0
@@ -232,5 +231,4 @@ endif
 
 
 
-
-printf "\nTests passed!"
+printf "\nInfo: All tests passed.\n"

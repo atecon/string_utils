@@ -4,7 +4,6 @@ Email: atecon@posteo.de (please ask questions and report bugs on the gretl maili
 
 Source code and tests: https://github.com/atecon/string_utils
 
-
 This package is a collection of helper functions for various operations of string variables and string arrays which are not covered by gretl's built-in methods (yet).
 
 
@@ -30,7 +29,7 @@ S 				- string array
 search_pattern	- string, pattern of string entry to be searched in S
 
 Return:
-Returns the positional entr(y)ies of string 'search_patter' in a column vector if present in string array 'S', 1x1 zero-matrix otherwise. If string array 'S' or string 'search_pattern' are not valid, a 1x1 zero-matrix is returned.
+Returns the positional entr(y)ies of string 'search_pattern' in a column vector if present in string array 'S', otherwise a 1x1 zero-matrix. If either string array 'S' or string 'search_pattern' are of length zero, a 1x1 zero-matrix is returned.
 
 
 struniq():
@@ -40,7 +39,7 @@ Arguments:
 S 		- string array
 
 Return:
-Array containing the distinct elements of array S not sorted but in their order of appearance. If string array 'S' is not valid, an empty array is returned. It at least one string element is of length zero, an empty string array is returned.
+Array containing the distinct elements of array S not sorted but in their order of appearance. If string array 'S' has length zero or at least one string element is of length zero, an empty string array is returned.
 
 
 strrepl():
@@ -51,18 +50,19 @@ str		- string
 n 	 	- int
 
 Return:
-Array containing string 'str' n-times. If string is not valid, an empty array is returned.
+Array containing string 'str' n-times. Also works for an empty string 'str'.
 
 
 msortby_rowlabels():
-Sort rows of matrix X by re-ordering row-labels of X by string array 'rowlabels_new'. 
+Sort rows of matrix X by re-ordering row-labels of X by string array 'rowlabels_new'.
 ----------
 Arguments:
-X 				- matrix, must include row-labels set by rnameset()
+X				- matrix, must include row-labels set by rnameset()
 rowlabels_new	- string array, re-order X' row-labels by this string
 
 Return:
 Matrix with sorted rows of X by 'rowlabels_new'. X must have row-labels. Also all elements in 'rowlabels_new' must be present in X' row-labels too, otherwise a 1x1 zero-matrix is returned.
+
 
 
 Changelog:

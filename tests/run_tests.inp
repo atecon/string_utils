@@ -131,6 +131,7 @@ if nelem(Suniq) != 0
     stop
 endif
 
+
 strings S = defarray("R1", " ", "")
 strings Suniq = struniq(S)
 if nelem(Suniq) != 0
@@ -155,7 +156,7 @@ endloop
 
 string str = ""
 strings S = strrepl(str, n)
-if nelem(S) != 0
+if nelem(S) != n
     stop
 endif
 

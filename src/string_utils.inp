@@ -27,6 +27,7 @@ function matrix strpos (const strings S "Array of strings",
     matrix ret = {}
 
     if strlen(search_pattern) && nelem(S)
+
         loop i=1..nelem(S) -q
             if S[i] == search_pattern
                 ret |= $i
@@ -52,7 +53,7 @@ function strings struniq (const strings S)
     strings suniq = array(0)
     scalar error = 0
 
-    if nelem(S) > 0 && strlen(S[1]) > 0
+    if nelem(S) && strlen(S[1])
         strings suniq = defarray(S[1])
 
         loop i=2..nelem(S) -q
@@ -60,16 +61,15 @@ function strings struniq (const strings S)
                 error++
                 break
             endif
-            if strpos(suniq, S[i]) == 0
+            if sum( strpos(suniq, S[i]) ) == 0
                 suniq += S[i]
             endif
         endloop
-        /*
-           if error
-           printf "\nWarning: At least one element in string array has length zero. Not allowed.\n"
-           return array(0)
-           endif
-        */
+
+        if error
+            #printf "\nWarning: At least one element in string array has length zero. Not allowed.\n"
+            return array(0)
+        endif
     endif
 
     return suniq
@@ -79,17 +79,14 @@ end function
 function strings strrepl (const string str, const int n[1::])
     /* Construct string array holding a constant string n times. */
 
-    strings S = array(0)
-
-    if strlen(str)
-        strings S = array(n)
-        loop i=1..n -q
-            S[i] = str
-        endloop
-    endif
+    strings S = array(n)
+    loop i=1..n -q
+        S[i] = str
+    endloop
 
     return S
 end function
+
 
 function matrix msortby_rowlabels (const matrix X,
                                    strings rowlabels_new "String array to be re-ordered")
@@ -113,7 +110,7 @@ function matrix msortby_rowlabels (const matrix X,
         return ret
     endif
 
-    matrix ret = zeros(rows(X),cols(X))
+    matrix ret = zeros(rows(X), cols(X))
 
     loop i=1..nelem(rowlabels_new) -q
         scalar pos = strpos(rnames, rowlabels_new[i])

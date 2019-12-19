@@ -37,10 +37,10 @@ function matrix strpos (const strings S "Array of strings",
         if rows(ret) > 0
             return ret
         else
-            return {0}
+            return {}
         endif
     else
-        return {0}
+        return {}
     endif
 end function
 
@@ -61,7 +61,7 @@ function strings struniq (const strings S)
                 error++
                 break
             endif
-            if sum( strpos(suniq, S[i]) ) == 0
+            if nelem( strpos(suniq, S[i]) ) == 0
                 suniq += S[i]
             endif
         endloop
@@ -97,9 +97,9 @@ function matrix msortby_rowlabels (const matrix X,
        All elements in 'rowlabels_new' must also be included in X' row
     names, otherwise a 1x1 zero-matrix is returned. */
 
-    matrix ret = {0}
+    matrix ret = {}
     strings rnames = rnameget(X)
-
+    
     if !nelem(rowlabels_new) || !nelem(rnames)
         return ret
     endif
@@ -111,16 +111,14 @@ function matrix msortby_rowlabels (const matrix X,
     endif
 
     matrix ret = zeros(rows(X), cols(X))
-
     loop i=1..nelem(rowlabels_new) -q
-        scalar pos = strpos(rnames, rowlabels_new[i])
-        if pos != 0
+        if nelem(strpos(rnames, rowlabels_new[i])) > 0
+            scalar pos = strpos(rnames, rowlabels_new[i])
             ret[pos,] = X[i,]
         else
-            return {0}
+            return {}
         endif
     endloop
-
     rnameset(ret, rowlabels_new)
 
     return ret

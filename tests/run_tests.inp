@@ -85,7 +85,7 @@ if strpos(S, search) != 2
     stop
 endif
 string search = ""
-if strpos(S, search) != 0
+if nelem(strpos(S, search)) != 0
     stop
 endif
 string search = " "
@@ -93,13 +93,17 @@ if strpos(S, search) != 4
     stop
 endif
 string search = "ABC"
-if strpos(S, search) != 0
+if nelem(strpos(S, search)) != 0
     stop
 endif
-
 strings S = defarray("A", "B", "A")
 string search = "A"
 if strpos(S, search)[1] != 1 || strpos(S, search)[2] != 3
+    stop
+endif
+strings S = array(0)
+string search = ""
+if nelem(strpos(S, search)) != 0
     stop
 endif
 
@@ -160,12 +164,11 @@ if nelem(S) != n
 endif
 
 
-
 print "Start with msortby_rowlabels()"
 matrix M = mshape(seq(1,9), 3, 3)
 strings Snew = defarray("C", "A", "B")
 strings S = defarray("A", "B", "C")
-if msortby_rowlabels(M, Snew) != 0 || rows(M) != 3 || cols(M) != 3
+if nelem(msortby_rowlabels(M, Snew)) != 0
     stop
 endif
 
@@ -186,7 +189,7 @@ strings Snew = defarray("C", "A", "B")
 strings S = defarray("A ", "B", "C")
 rnameset(M, S)
 matrix Mnew = msortby_rowlabels(M, Snew)
-if msortby_rowlabels(M, Snew) != 0 || rows(M) != 3 || cols(M) != 3
+if nelem(msortby_rowlabels(M, Snew)) != 0
     stop
 endif
 
@@ -194,7 +197,7 @@ strings Snew = defarray("C", "A", "D")
 strings S = defarray("A", "B", "C")
 rnameset(M, S)
 matrix Mnew = msortby_rowlabels(M, Snew)
-if msortby_rowlabels(M, Snew) != 0 || rows(M) != 3 || cols(M) != 3
+if nelem(msortby_rowlabels(M, Snew)) != 0
     stop
 endif
 

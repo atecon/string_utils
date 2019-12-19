@@ -29,7 +29,7 @@ S 				- string array
 search_pattern	- string, pattern of string entry to be searched in S
 
 Return:
-Returns the positional entr(y)ies of string 'search_pattern' in a column vector if present in string array 'S', otherwise a 1x1 zero-matrix. If either string array 'S' or string 'search_pattern' are of length zero, a 1x1 zero-matrix is returned.
+Returns the positional entr(y)ies of string 'search_pattern' in a column vector if present in string array 'S', otherwise a 1x1 zero-matrix. If either string array 'S' or string 'search_pattern' are of length zero, an empty matrix is returned (can be checked by <nelem(matrix)>).
 
 
 struniq():
@@ -61,7 +61,7 @@ X				- matrix, must include row-labels set by rnameset()
 rowlabels_new	- string array, re-order X' row-labels by this string
 
 Return:
-Matrix with sorted rows of X by 'rowlabels_new'. X must have row-labels. Also all elements in 'rowlabels_new' must be present in X' row-labels too, otherwise a 1x1 zero-matrix is returned.
+Matrix with sorted rows of X by 'rowlabels_new'. X must have row-labels. Also all elements in 'rowlabels_new' must be present in X' row-labels too, otherwise an empty matrix is returned (can be checked by <nelem(matrix)>).
 
 
 

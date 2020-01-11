@@ -78,21 +78,22 @@ test_strprog()
 
 function void test_strdrop (void)
     print "Start with strdrop()"
-strings S = defarray("ABU Kko*&(", "C?`=/$%&")
-string sdrop = "C?`=/$%&"
-if nelem(strdrop(S, sdrop)) != 1
-    stop
-endif
-if strdrop(S, sdrop)[1] != "ABU Kko*&("
-    stop
-endif
-string sdrop = "ABU Kko*&("
-if nelem(strdrop(S, sdrop)) != 1
-    stop
-endif
-if strdrop(S, sdrop)[1] != "C?`=/$%&"
-    stop
-endif
+    
+    strings S = defarray("ABU Kko*&(", "C?`=/$%&")
+    string sdrop = "C?`=/$%&"
+    strings S = strdrop(S, sdrop)
+    assert_equal_num(nelem(S), 1)
+    assert_equal_str(S[1], "ABU Kko*&(")
+    
+    strings S = defarray("ABU Kko*&(", "C?`=/$%&")
+    string sdrop = "ABU Kko*&("
+    strings S = strdrop(S, sdrop)
+    assert_equal_num(nelem(S), 1)
+    assert_equal_str(S[1], "C?`=/$%&")
+end function
+
+test_strdrop()
+
 
 strings S = defarray("A", "AB", "AB")
 string sdrop = "A"

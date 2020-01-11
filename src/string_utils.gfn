@@ -2,8 +2,8 @@
 <gretl-functions>
 <gretl-function-package name="string_utils" no-data-ok="true" minver="2018a">
 <author email="atecon@posteo.de">Artur Tarassow</author>
-<version>0.1</version>
-<date>2019-12-17</date>
+<version>0.2</version>
+<date>2020-01-11</date>
 <description>Helper functions for string operations</description>
 <tags>C81</tags>
 <help>
@@ -62,6 +62,18 @@ Return:
 Array containing string 'str' n-times. Also works for an empty string 'str'.
 
 
+strprog():
+Construct a string array. To each numerical value of x a string prefix 'pre' and a suffix 'post' is concatenated.
+----------
+Arguments:
+x 		- matrix 
+pre 	- string, optional
+post 	- string, optional
+
+Return:
+Array of length n=rows(vec(x)). Each string is a combination of the prefix 'pre', the i-th numerical value of x and the suffix 'post'.
+
+
 msortby_rowlabels():
 Sort rows of matrix X by re-ordering row-labels of X by string array 'rowlabels_new'.
 ----------
@@ -75,8 +87,10 @@ Matrix with sorted rows of X by 'rowlabels_new'. X must have row-labels. Also al
 
 
 Changelog:
+- 0.2, December 2019:
+    + add new function strprog()
 - 0.1, December 2019:
-    initial release
+    + initial release
 </help>
 <gretl-function name="strdrop" type="strings">
  <params count="2">
@@ -204,6 +218,33 @@ rnameset(ret, rowlabels_new)
 return ret
 </code>
 </gretl-function>
+<gretl-function name="strprog" type="strings">
+ <params count="3">
+  <param name="x" type="matrix"/>
+  <param name="pre" type="string" optional="true" const="true"/>
+  <param name="post" type="string" optional="true" const="true"/>
+ </params>
+<code>/* Construct a string array where to each numerical value of x
+a string prefix 'pre' and a suffix 'post' is concatenated.
+Proposed by Riccardo &quot;Jack&quot; Luccetti. */
+matrix x = vec(x)
+scalar n = rows(x)
+strings ret = array(n)
+if !nelem(x)
+  return ret
+endif
+if !exists(pre)
+  pre = &quot;&quot;
+endif
+if !exists(post)
+  post = &quot;&quot;
+endif
+loop i=1..n -q
+  ret[i] = sprintf(&quot;%s%d%s&quot;, pre, x[i], post)
+endloop
+return ret
+</code>
+</gretl-function>
 <sample-script>
 clear
 set verbose off
@@ -229,6 +270,9 @@ matrix m = mshape(seq(1,4),2,2)
 rnameset(m, &quot;R1 R2&quot;)
 strings rnames_new = defarray(&quot;R2&quot;, &quot;R1&quot;)
 eval msortby_rowlabels(m, rnames_new)
+
+eval strprog(seq(2,4), &quot;beta_&quot;)
+eval strprog(seq(1,2), &quot;a[\&quot;, , \&quot;]&quot;)
 </sample-script>
 </gretl-function-package>
 </gretl-functions>

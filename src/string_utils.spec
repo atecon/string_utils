@@ -1,11 +1,11 @@
 author = Artur Tarassow
 email = atecon@posteo.de
-version = 0.1
-date = 2019-12-17
+version = 0.2
+date = 2020-01-11
 description = Helper functions for string operations
 tags = C81
 min-version = 2018a
 data-requirement = no-data-ok
-public = strdrop strpos struniq strrepl msortby_rowlabels
+public = strdrop strpos struniq strrepl msortby_rowlabels strprog
 help = string_utils_help.txt
 sample-script = string_utils_sample.inp

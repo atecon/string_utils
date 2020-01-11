@@ -125,6 +125,35 @@ function matrix msortby_rowlabels (const matrix X,
 end function
 
 
+function strings strprog (matrix x,
+                          const string pre[null],
+                          const string post[null])
+    /* Construct a string array where to each numerical value of x
+    a string prefix 'pre' and a suffix 'post' is concatenated.
+    Proposed by Riccardo "Jack" Luccetti. */
+
+    matrix x = vec(x)
+    scalar n = rows(x)
+    strings ret = array(n)
+
+    if !nelem(x)
+        return ret
+    endif
+    if !exists(pre)
+        pre = ""
+    endif
+    if !exists(post)
+        post = ""
+    endif
+
+    loop i=1..n -q
+        ret[i] = sprintf("%s%d%s", pre, x[i], post)
+    endloop
+
+    return ret
+end function
+
+
 
 
 # TODO: Not yet implemented -- works only if "to_num = 1"

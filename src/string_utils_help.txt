@@ -53,6 +53,18 @@ Return:
 Array containing string 'str' n-times. Also works for an empty string 'str'.
 
 
+strprog():
+Construct a string array. To each numerical value of x a string prefix 'pre' and a suffix 'post' is concatenated.
+----------
+Arguments:
+x 		- matrix 
+pre 	- string, optional
+post 	- string, optional
+
+Return:
+Array of length n=rows(vec(x)). Each string is a combination of the prefix 'pre', the i-th numerical value of x and the suffix 'post'.
+
+
 msortby_rowlabels():
 Sort rows of matrix X by re-ordering row-labels of X by string array 'rowlabels_new'.
 ----------
@@ -66,5 +78,7 @@ Matrix with sorted rows of X by 'rowlabels_new'. X must have row-labels. Also al
 
 
 Changelog:
+- 0.2, December 2019:
+    + add new function strprog()
 - 0.1, December 2019:
-    initial release
+    + initial release

@@ -22,26 +22,17 @@ end function
 function matrix strpos (const strings S "Array of strings",
                         const string search_pattern "String being searched for in S")
     # Returns the positional entries of string in S in a column vector
-    # if S contains the string, 0 otherwise.
+    # if S contains the string, an empty matrix otherwise.
 
     matrix ret = {}
 
-    if strlen(search_pattern) && nelem(S)
-
-        loop i=1..nelem(S) -q
-            if S[i] == search_pattern
-                ret |= $i
-            endif
-        endloop
-
-        if rows(ret) > 0
-            return ret
-        else
-            return {}
+    loop i=1..nelem(S) -q
+        if S[i] == search_pattern
+            ret |= $i
         endif
-    else
-        return {}
-    endif
+    endloop
+
+    return ret
 end function
 
 
@@ -99,7 +90,7 @@ function matrix msortby_rowlabels (const matrix X,
 
     matrix ret = {}
     strings rnames = rnameget(X)
-    
+
     if !nelem(rowlabels_new) || !nelem(rnames)
         return ret
     endif
@@ -129,7 +120,7 @@ function strings strprog (matrix x,
                           const string pre[null],
                           const string post[null])
     /* Construct a string array where to each numerical value of x
-    a string prefix 'pre' and a suffix 'post' is concatenated.
+       a string prefix 'pre' and a suffix 'post' is concatenated.
     Proposed by Riccardo "Jack" Luccetti. */
 
     matrix x = vec(x)

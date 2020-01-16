@@ -144,8 +144,8 @@ function void test_strpos (void)
     assert_equal_num(pos, 2)
 
     string search = ""
-    matrix mpos = strpos(S, search)
-    assert_equal_num(nelem(mpos), 0)
+    scalar pos = strpos(S, search)
+    assert_equal_num(pos, 3)
         
     string search = " "
     scalar pos = strpos(S, search)

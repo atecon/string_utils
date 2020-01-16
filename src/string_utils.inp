@@ -24,6 +24,8 @@ function matrix strpos (const strings S "Array of strings",
     # Returns the positional entries of string in S in a column vector
     # if S contains the string, an empty matrix otherwise.
 
+    print "Gretl version 2020b includes the instrings() as a built-in alternative to strpos()"
+
     matrix ret = {}
 
     loop i=1..nelem(S) -q
@@ -116,7 +118,7 @@ function matrix msortby_rowlabels (const matrix X,
 end function
 
 
-function strings strprog (matrix x,
+function strings strsandwich (matrix x,
                           const string pre[null],
                           const string post[null])
     /* Construct a string array where to each numerical value of x
@@ -143,8 +145,6 @@ function strings strprog (matrix x,
 
     return ret
 end function
-
-
 
 
 # TODO: Not yet implemented -- works only if "to_num = 1"

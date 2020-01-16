@@ -29,7 +29,7 @@ S 				- string array
 search_pattern	- string, pattern of string entry to be searched in S
 
 Return:
-Returns the positional entr(y)ies of string 'search_pattern' in a column vector if present in string array 'S', otherwise a 1x1 zero-matrix. If either string array 'S' or string 'search_pattern' are of length zero, an empty matrix is returned (can be checked by <nelem(matrix)>).
+Returns the positional entr(y)ies of string 'search_pattern' in a column vector if present in string array 'S', otherwise a 1x1 zero-matrix. If string array 'S' is of length zero, an empty matrix is returned (can be checked by <nelem(matrix)>).
 
 
 struniq():
@@ -78,6 +78,9 @@ Matrix with sorted rows of X by 'rowlabels_new'. X must have row-labels. Also al
 
 
 Changelog:
+- 0.21, Januar 2020:
+	+ strpos() function also accepts and searches for empty string (length zero) in array S.
+	+ minor improvements in strpos()
 - 0.2, December 2019:
     + add new function strprog()
 - 0.1, December 2019:

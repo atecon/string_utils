@@ -5,19 +5,19 @@ include "./src/string_utils.inp" --force
 include assertion.gfn
 
 
-function void test_strprog (void)
-    print "Start with strprog()"
+function void test_strsandwich (void)
+    print "Start with strsandwich()"
 
     string pre = ""
     string post = ""
     matrix x = {}
-    strings S = strprog(x)
+    strings S = strsandwich(x)
     assert_equal_num(nelem(S), 0)
     
     string pre = ""
     string post = ""
     matrix x = seq(1,3)
-    strings S = strprog(x)
+    strings S = strsandwich(x)
     assert_equal_num(nelem(S), 3)
     assert_equal_str(S[1], "1")
     assert_equal_str(S[2], "2")
@@ -26,7 +26,7 @@ function void test_strprog (void)
     string pre = ""
     string post = ""
     matrix x = seq(1,3)
-    strings S = strprog(x, pre, post)
+    strings S = strsandwich(x, pre, post)
     assert_equal_num(nelem(S), 3)
     assert_equal_str(S[1], "1")
     assert_equal_str(S[2], "2")
@@ -36,7 +36,7 @@ function void test_strprog (void)
     string post = ""
     matrix x = seq(1,3)
     x[1] = NA
-    strings S = strprog(x)
+    strings S = strsandwich(x)
     assert_equal_num(nelem(S), 3)
     assert_equal_str(S[1], "NA")
     assert_equal_str(S[2], "2")
@@ -46,7 +46,7 @@ function void test_strprog (void)
     string post = ""
     matrix x = seq(1,3)
     x[1] = NA
-    strings S = strprog(x, pre)
+    strings S = strsandwich(x, pre)
     assert_equal_num(nelem(S), 3)
     assert_equal_str(S[1], "mat[NA")
     assert_equal_str(S[2], "mat[2")
@@ -56,7 +56,7 @@ function void test_strprog (void)
     string post = "&"
     matrix x = seq(1,3)
     x[1] = NA
-    strings S = strprog(x, pre, post)
+    strings S = strsandwich(x, pre, post)
     assert_equal_num(nelem(S), 3)
     assert_equal_str(S[1], "mat[NA&")
     assert_equal_str(S[2], "mat[2&")
@@ -66,7 +66,7 @@ function void test_strprog (void)
     string post = "987"
     matrix x = seq(1,3)
     x[1] = NA
-    strings S = strprog(x, , post)
+    strings S = strsandwich(x, , post)
     assert_equal_num(nelem(S), 3)
     assert_equal_str(S[1], "NA987")
     assert_equal_str(S[2], "2987")
@@ -261,7 +261,7 @@ function void test_msortby_rowlabels (void)
     assert_equal_num(sumr(m)[3], 12)
 end function
 
-test_strprog()
+test_strsandwich()
 test_strdrop()
 test_strpos()
 test_struniq()

@@ -39,7 +39,7 @@ end function
 
 function strings struniq (const strings S)
 /* Returns an array containing the distinct elements
-   of S not sorted but in their order of appearance. */
+    of S not sorted but in their order of appearance. */
 
     strings suniq = array(0)
     scalar error = 0

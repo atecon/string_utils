@@ -80,7 +80,8 @@ Matrix with sorted rows of X by 'rowlabels_new'. X must have row-labels. Also al
 Changelog:
 - 0.21, Januar 2020:
 	+ strpos() function also accepts and searches for empty string (length zero) in array S.
-	+ minor improvements in strpos()
+	+ drop unnecessary checks in strpos()
+	+ add new function strsandwich()
 - 0.2, December 2019:
     + add new function strprog()
 - 0.1, December 2019:

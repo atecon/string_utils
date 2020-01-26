@@ -23,7 +23,9 @@ function matrix strpos (const strings S "Array of strings",
                         const string search_pattern "String being searched for in S")
     /* Returns the positional entries of string in S in a column vector */
 
-    print "Gretl version 2020b includes the instrings() as a built-in alternative to strpos()"
+    # TODO: check gretl version
+#    printf "Info: Gretl version 2020b will include the instrings()\n\
+#      function as a built-in alternative to strpos()"
 
     matrix ret = {}
 

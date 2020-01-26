@@ -1,7 +1,7 @@
 set verbose off
 clear
 
-include "./src/string_utils.inp" --force
+include "./src/string_utils.inp"
 include assertion.gfn
 
 
@@ -71,7 +71,6 @@ function void test_strsandwich (void)
     assert_equal_str(S[1], "NA987")
     assert_equal_str(S[2], "2987")
     assert_equal_str(S[3], "3987")
-
 end function
 
 
@@ -135,6 +134,7 @@ function void test_strpos (void)
     print "Start with strpos()"
     
     strings S = defarray("ABU Kko*&(", "C ?`=/$%&", "", " ")
+
     string search = "ABU Kko*&("
     scalar pos = strpos(S, search)
     assert_equal_num(pos, 1)
@@ -146,11 +146,11 @@ function void test_strpos (void)
     string search = ""
     scalar pos = strpos(S, search)
     assert_equal_num(pos, 3)
-        
+
     string search = " "
     scalar pos = strpos(S, search)
     assert_equal_num(pos, 4)
-    
+
     string search = "ABC"
     matrix mpos = strpos(S, search)
     assert_equal_num(nelem(mpos), 0)

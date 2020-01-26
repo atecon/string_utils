@@ -23,7 +23,7 @@ rnameset(m, "R1 R2")
 strings rnames_new = defarray("R2", "R1")
 eval msortby_rowlabels(m, rnames_new)
 
-eval strprog(seq(2,4), "beta_")
-eval strprog(seq(1,2), "a[" , "]") 
+eval strsandwich(seq(2,4), "beta_")
+eval strsandwich(seq(1,2), "a[" , "]") 
 
 

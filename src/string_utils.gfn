@@ -2,8 +2,8 @@
 <gretl-functions>
 <gretl-function-package name="string_utils" no-data-ok="true" minver="2018a">
 <author email="atecon@posteo.de">Artur Tarassow</author>
-<version>0.2</version>
-<date>2020-01-11</date>
+<version>0.21</version>
+<date>2020-01-26</date>
 <description>Helper functions for string operations</description>
 <tags>C81</tags>
 <help>
@@ -38,7 +38,7 @@ S 				- string array
 search_pattern	- string, pattern of string entry to be searched in S
 
 Return:
-Returns the positional entr(y)ies of string 'search_pattern' in a column vector if present in string array 'S', otherwise a 1x1 zero-matrix. If either string array 'S' or string 'search_pattern' are of length zero, an empty matrix is returned (can be checked by &lt;nelem(matrix)&gt;).
+Returns the positional entr(y)ies of string 'search_pattern' in a column vector if present in string array 'S', otherwise a 1x1 zero-matrix. If string array 'S' is of length zero, an empty matrix is returned (can be checked by &lt;nelem(matrix)&gt;).
 
 
 struniq():
@@ -62,7 +62,7 @@ Return:
 Array containing string 'str' n-times. Also works for an empty string 'str'.
 
 
-strprog():
+strsandwich():
 Construct a string array. To each numerical value of x a string prefix 'pre' and a suffix 'post' is concatenated.
 ----------
 Arguments:
@@ -87,6 +87,10 @@ Matrix with sorted rows of X by 'rowlabels_new'. X must have row-labels. Also al
 
 
 Changelog:
+- 0.21, Januar 2020:
+	+ strpos() function also accepts and searches for empty string (length zero) in array S.
+	+ drop unnecessary checks in strpos()
+	+ add new function strsandwich()
 - 0.2, December 2019:
     + add new function strprog()
 - 0.1, December 2019:
@@ -122,23 +126,17 @@ return ret
 <description>String being searched for in S</description>
   </param>
  </params>
-<code># Returns the positional entries of string in S in a column vector
-# if S contains the string, 0 otherwise.
+<code>/* Returns the positional entries of string in S in a column vector */
+# TODO: check gretl version
+#    printf &quot;Info: Gretl version 2020b will include the instrings()\n\
+#      function as a built-in alternative to strpos()&quot;
 matrix ret = {}
-if strlen(search_pattern) &amp;&amp; nelem(S)
-  loop i=1..nelem(S) -q
-    if S[i] == search_pattern
-      ret |= $i
-    endif
-  endloop
-  if rows(ret) &gt; 0
-    return ret
-  else
-    return {}
+loop i=1..nelem(S) -q
+  if S[i] == search_pattern
+    ret |= $i
   endif
-else
-  return {}
-endif
+endloop
+return ret
 </code>
 </gretl-function>
 <gretl-function name="struniq" type="strings">
@@ -146,8 +144,7 @@ endif
   <param name="S" type="strings" const="true"/>
  </params>
 <code>/* Returns an array containing the distinct elements
-of S not sorted but in their order of appearance. Fails in case
-at least one element is an empty string. */
+of S not sorted but in their order of appearance. */
 strings suniq = array(0)
 scalar error = 0
 if nelem(S) &amp;&amp; strlen(S[1])
@@ -218,7 +215,7 @@ rnameset(ret, rowlabels_new)
 return ret
 </code>
 </gretl-function>
-<gretl-function name="strprog" type="strings">
+<gretl-function name="strsandwich" type="strings">
  <params count="3">
   <param name="x" type="matrix"/>
   <param name="pre" type="string" optional="true" const="true"/>
@@ -226,7 +223,7 @@ return ret
  </params>
 <code>/* Construct a string array where to each numerical value of x
 a string prefix 'pre' and a suffix 'post' is concatenated.
-Proposed by Riccardo &quot;Jack&quot; Luccetti. */
+Proposed by Riccardo &quot;Jack&quot; Lucchetti. */
 matrix x = vec(x)
 scalar n = rows(x)
 strings ret = array(n)
@@ -271,8 +268,8 @@ rnameset(m, &quot;R1 R2&quot;)
 strings rnames_new = defarray(&quot;R2&quot;, &quot;R1&quot;)
 eval msortby_rowlabels(m, rnames_new)
 
-eval strprog(seq(2,4), &quot;beta_&quot;)
-eval strprog(seq(1,2), &quot;a[\&quot;, , \&quot;]&quot;)
+eval strsandwich(seq(2,4), &quot;beta_&quot;)
+eval strsandwich(seq(1,2), &quot;a[&quot; , &quot;]&quot;)
 </sample-script>
 </gretl-function-package>
 </gretl-functions>

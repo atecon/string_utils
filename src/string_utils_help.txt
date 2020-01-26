@@ -53,7 +53,7 @@ Return:
 Array containing string 'str' n-times. Also works for an empty string 'str'.
 
 
-strprog():
+strsandwich():
 Construct a string array. To each numerical value of x a string prefix 'pre' and a suffix 'post' is concatenated.
 ----------
 Arguments:

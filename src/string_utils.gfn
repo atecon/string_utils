@@ -3,7 +3,7 @@
 <gretl-function-package name="string_utils" no-data-ok="true" minver="2018a">
 <author email="atecon@posteo.de">Artur Tarassow</author>
 <version>0.21</version>
-<date>2020-01-26</date>
+<date>2020-01-31</date>
 <description>Helper functions for string operations</description>
 <tags>C81</tags>
 <help>
@@ -32,6 +32,7 @@ Return string array excluding string 'drop_str' if present in S. If 'drop_str' i
 
 strpos():
 Determine the positions of a string in string array S.
+NOTE: This function will be retired at the end of year 2020 since gretl versions &gt;2020a will include the built-in function instrings() replacing strpos().
 ----------
 Arguments:
 S 				- string array
@@ -88,7 +89,8 @@ Matrix with sorted rows of X by 'rowlabels_new'. X must have row-labels. Also al
 
 Changelog:
 - 0.21, Januar 2020:
-	+ strpos() function also accepts and searches for empty string (length zero) in array S.
+	+ strpos() function also accepts and searches for empty string
+	(length zero) in array S.
 	+ drop unnecessary checks in strpos()
 	+ add new function strsandwich()
 - 0.2, December 2019:
@@ -118,18 +120,19 @@ return ret
 </code>
 </gretl-function>
 <gretl-function name="strpos" type="matrix">
- <params count="2">
+ <params count="3">
   <param name="S" type="strings" const="true">
 <description>Array of strings</description>
   </param>
   <param name="search_pattern" type="string" const="true">
 <description>String being searched for in S</description>
   </param>
+  <param name="print_warning" type="bool" default="1" const="true"/>
  </params>
 <code>/* Returns the positional entries of string in S in a column vector */
-# TODO: check gretl version
-#    printf &quot;Info: Gretl version 2020b will include the instrings()\n\
-#      function as a built-in alternative to strpos()&quot;
+if print_warning &amp;&amp; ($version &gt;= 20201)
+  printf &quot;\nWarning: Please use the built-in function instrings() instead\n           of strpos() which will be deprecated end of 2020.&quot;
+endif
 matrix ret = {}
 loop i=1..nelem(S) -q
   if S[i] == search_pattern
@@ -154,7 +157,7 @@ if nelem(S) &amp;&amp; strlen(S[1])
       error++
       break
     endif
-    if nelem( strpos(suniq, S[i]) ) == 0
+    if nelem( strpos(suniq, S[i], 0) ) == 0
       suniq += S[i]
     endif
   endloop
@@ -204,8 +207,8 @@ if nelem(rowlabels_new) != rows(X)
 endif
 matrix ret = zeros(rows(X), cols(X))
 loop i=1..nelem(rowlabels_new) -q
-  if nelem(strpos(rnames, rowlabels_new[i])) &gt; 0
-    scalar pos = strpos(rnames, rowlabels_new[i])
+  if nelem(strpos(rnames, rowlabels_new[i], 0)) &gt; 0
+    scalar pos = strpos(rnames, rowlabels_new[i], 0)
     ret[pos,] = X[i,]
   else
     return {}

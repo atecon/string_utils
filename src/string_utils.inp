@@ -20,12 +20,14 @@ end function
 
 
 function matrix strpos (const strings S "Array of strings",
-                        const string search_pattern "String being searched for in S")
+                        const string search_pattern "String being searched for in S",
+                        const bool print_warning[1])
     /* Returns the positional entries of string in S in a column vector */
 
-    # TODO: check gretl version
-#    printf "Info: Gretl version 2020b will include the instrings()\n\
-#      function as a built-in alternative to strpos()"
+    if print_warning && ($version >= 20201)
+        printf "\nWarning: Please use the built-in function instrings() instead\n\
+          of strpos() which will be deprecated end of 2020."
+    endif
 
     matrix ret = {}
 
@@ -54,7 +56,7 @@ function strings struniq (const strings S)
                 error++
                 break
             endif
-            if nelem( strpos(suniq, S[i]) ) == 0
+            if nelem( strpos(suniq, S[i], 0) ) == 0
                 suniq += S[i]
             endif
         endloop
@@ -105,8 +107,8 @@ function matrix msortby_rowlabels (const matrix X,
 
     matrix ret = zeros(rows(X), cols(X))
     loop i=1..nelem(rowlabels_new) -q
-        if nelem(strpos(rnames, rowlabels_new[i])) > 0
-            scalar pos = strpos(rnames, rowlabels_new[i])
+        if nelem(strpos(rnames, rowlabels_new[i], 0)) > 0
+            scalar pos = strpos(rnames, rowlabels_new[i], 0)
             ret[pos,] = X[i,]
         else
             return {}

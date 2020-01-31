@@ -1,7 +1,7 @@
 author = Artur Tarassow
 email = atecon@posteo.de
 version = 0.21
-date = 2020-01-26
+date = 2020-01-31
 description = Helper functions for string operations
 tags = C81
 min-version = 2018a

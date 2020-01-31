@@ -23,6 +23,7 @@ Return string array excluding string 'drop_str' if present in S. If 'drop_str' i
 
 strpos():
 Determine the positions of a string in string array S.
+NOTE: This function will be retired at the end of year 2020 since gretl versions >2020a will include the built-in function instrings() replacing strpos().
 ----------
 Arguments:
 S 				- string array
@@ -79,7 +80,8 @@ Matrix with sorted rows of X by 'rowlabels_new'. X must have row-labels. Also al
 
 Changelog:
 - 0.21, Januar 2020:
-	+ strpos() function also accepts and searches for empty string (length zero) in array S.
+	+ strpos() function also accepts and searches for empty string
+	(length zero) in array S.
 	+ drop unnecessary checks in strpos()
 	+ add new function strsandwich()
 - 0.2, December 2019:

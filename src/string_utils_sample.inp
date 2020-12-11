@@ -24,6 +24,10 @@ strings rnames_new = defarray("R2", "R1")
 eval msortby_rowlabels(m, rnames_new)
 
 eval strsandwich(seq(2,4), "beta_")
-eval strsandwich(seq(1,2), "a[" , "]") 
+eval strsandwich(seq(1,2), "a[" , "]")
 
+strings S1 = defarray("A", "B")
+strings S2 = defarray("A", "B", "; ")
+eval strflatten(S1)
+eval strflatten(S2)
 

@@ -2,51 +2,49 @@
 <gretl-functions>
 <gretl-function-package name="string_utils" no-data-ok="true" minver="2018a">
 <author email="atecon@posteo.de">Artur Tarassow</author>
-<version>0.21</version>
-<date>2020-01-31</date>
+<version>0.3</version>
+<date>2020-12-11</date>
 <description>Helper functions for string operations</description>
 <tags>C81</tags>
 <help>
-Help text for the string_utils.gfn package by Artur Tarassow.
-
-Email: atecon@posteo.de (please ask questions and report bugs on the gretl mailing list if possible).
-
-Source code and tests: https://github.com/atecon/string_utils
-
 This package is a collection of helper functions for various operations of string variables and string arrays which are not covered by gretl's built-in methods (yet).
+
+Please ask questions and report bugs on the gretl mailing list if possible. Alternatively, create an issue ticket on the github repo (see below).
+Source code and test script(s) can be found here:
+https://github.com/atecon/string_utils
+
 
 
 Public functions:
 -----------------
 
+strflatten():
+Flatten an array of strings to a string separated by some delimiter.
+----------
+Arguments:
+S           - string array, Input string array
+delimiter   - string, Delimiter (optional, default: &quot;,&quot;)
+
+Return:
+String value separating each array item by some delimiter.
+
+
 strdrop():
 Drop a specific string 'drop_str' from string array 'S'. String 'drop_str' may occur multiple times.
 ----------
 Arguments:
-S 		- string array
-drop_str 	- string, pattern of string value to be droppped from S
+S           - string array, Input
+drop_str    - string, Pattern of string value to be dropped from S
 
 Return:
 Return string array excluding string 'drop_str' if present in S. If 'drop_str' is not present, the original array 'S' is returned instead. If string array 'S' has length zero, an empty array is returned.
-
-
-strpos():
-Determine the positions of a string in string array S.
-NOTE: This function will be retired at the end of year 2020 since gretl versions &gt;2020a will include the built-in function instrings() replacing strpos().
-----------
-Arguments:
-S 				- string array
-search_pattern	- string, pattern of string entry to be searched in S
-
-Return:
-Returns the positional entr(y)ies of string 'search_pattern' in a column vector if present in string array 'S', otherwise a 1x1 zero-matrix. If string array 'S' is of length zero, an empty matrix is returned (can be checked by &lt;nelem(matrix)&gt;).
 
 
 struniq():
 Get the unique string values of string array S.
 ----------
 Arguments:
-S 		- string array
+S           - string array
 
 Return:
 Array containing the distinct elements of array S not sorted but in their order of appearance. If string array 'S' has length zero or at least one string element is of length zero, an empty string array is returned.
@@ -56,20 +54,20 @@ strrepl():
 Copy string n-times into a string array of length n.
 ----------
 Arguments:
-str		- string
-n 	 	- int
+str         - string
+n           - int
 
 Return:
 Array containing string 'str' n-times. Also works for an empty string 'str'.
 
 
 strsandwich():
-Construct a string array. To each numerical value of x a string prefix 'pre' and a suffix 'post' is concatenated.
+Construct a string array. To each numerical value of x concatenate a string prefix 'pre' and a suffix 'post'.
 ----------
 Arguments:
-x 		- matrix 
-pre 	- string, optional
-post 	- string, optional
+x           - matrix
+pre         - string, optional
+post        - string, optional
 
 Return:
 Array of length n=rows(vec(x)). Each string is a combination of the prefix 'pre', the i-th numerical value of x and the suffix 'post'.
@@ -79,8 +77,8 @@ msortby_rowlabels():
 Sort rows of matrix X by re-ordering row-labels of X by string array 'rowlabels_new'.
 ----------
 Arguments:
-X				- matrix, must include row-labels set by rnameset()
-rowlabels_new	- string array, re-order X' row-labels by this string
+X               - matrix, must include row-labels set by rnameset()
+rowlabels_new   - string array, re-order X' row-labels by this string
 
 Return:
 Matrix with sorted rows of X by 'rowlabels_new'. X must have row-labels. Also all elements in 'rowlabels_new' must be present in X' row-labels too, otherwise an empty matrix is returned (can be checked by &lt;nelem(matrix)&gt;).
@@ -88,16 +86,40 @@ Matrix with sorted rows of X by 'rowlabels_new'. X must have row-labels. Also al
 
 
 Changelog:
+- 0.3, December 2020:
+    + Add new strflatten() function
+    + Remove deprecated function strpos() as reported in version 0.21 - this
+      function is superseded by gretl's built-in function instrings() which is
+      available since gretl 2020a
 - 0.21, Januar 2020:
-	+ strpos() function also accepts and searches for empty string
-	(length zero) in array S.
-	+ drop unnecessary checks in strpos()
-	+ add new function strsandwich()
+    + strpos() function also accepts and searches for empty string
+      (length zero) in array S.
+    + drop unnecessary checks in strpos()
+    + add new function strsandwich()
 - 0.2, December 2019:
     + add new function strprog()
 - 0.1, December 2019:
     + initial release
 </help>
+<gretl-function name="strflatten" type="string">
+ <params count="2">
+  <param name="S" type="strings" const="true"/>
+  <param name="delimiter" type="string" optional="true" const="true"/>
+ </params>
+<code>/* Flatten string array to string. */
+if exists(delimiter) == FALSE
+  delimiter = &quot;,&quot;
+endif
+string new_string
+loop foreach i S
+  new_string += sprintf(&quot;%s&quot;, &quot;$i&quot;)
+  if i &lt; nelem(S)
+    new_string += sprintf(&quot;%s&quot;, delimiter)
+  endif
+endloop
+return new_string
+</code>
+</gretl-function>
 <gretl-function name="strdrop" type="strings">
  <params count="2">
   <param name="S" type="strings" const="true"/>
@@ -130,9 +152,6 @@ return ret
   <param name="print_warning" type="bool" default="1" const="true"/>
  </params>
 <code>/* Returns the positional entries of string in S in a column vector */
-if print_warning &amp;&amp; ($version &gt;= 20201)
-  printf &quot;\nWarning: Please use the built-in function instrings() instead\n           of strpos() which will be deprecated end of 2020.&quot;
-endif
 matrix ret = {}
 loop i=1..nelem(S) -q
   if S[i] == search_pattern
@@ -273,6 +292,11 @@ eval msortby_rowlabels(m, rnames_new)
 
 eval strsandwich(seq(2,4), &quot;beta_&quot;)
 eval strsandwich(seq(1,2), &quot;a[&quot; , &quot;]&quot;)
+
+strings S1 = defarray(&quot;A&quot;, &quot;B&quot;)
+strings S2 = defarray(&quot;A&quot;, &quot;B&quot;, &quot;; &quot;)
+eval strflatten(S1)
+eval strflatten(S2)
 </sample-script>
 </gretl-function-package>
 </gretl-functions>

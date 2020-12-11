@@ -1,3 +1,24 @@
+function string strflatten  (const strings S,
+                             const string delimiter[null])
+    /* Flatten string array to string. */
+
+    if exists(delimiter) == FALSE
+        delimiter = ","
+    endif
+
+    string new_string
+
+    loop foreach i S
+        new_string += sprintf("%s", "$i")
+        if i < nelem(S)
+          new_string += sprintf("%s", delimiter)
+        endif
+    endloop
+
+    return new_string
+end function
+
+
 function strings strdrop (const strings S, const string drop_str)
     /* Drop a specific string from string array. String may occur multiple times. */
 
@@ -23,11 +44,6 @@ function matrix strpos (const strings S "Array of strings",
                         const string search_pattern "String being searched for in S",
                         const bool print_warning[1])
     /* Returns the positional entries of string in S in a column vector */
-
-    if print_warning && ($version >= 20201)
-        printf "\nWarning: Please use the built-in function instrings() instead\n\
-          of strpos() which will be deprecated end of 2020."
-    endif
 
     matrix ret = {}
 

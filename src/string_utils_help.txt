@@ -85,6 +85,7 @@ Changelog:
     + Remove deprecated function strpos() as reported in version 0.21 - this
       function is superseded by gretl's built-in function instrings() which is
       available since gretl 2020a
+    + Change minimum version required from 2018a to 2019c.
 - 0.21, Januar 2020:
     + strpos() function also accepts and searches for empty string
       (length zero) in array S.

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <gretl-functions>
-<gretl-function-package name="string_utils" no-data-ok="true" minver="2018a">
+<gretl-function-package name="string_utils" no-data-ok="true" minver="2019c">
 <author email="atecon@posteo.de">Artur Tarassow</author>
 <version>0.3</version>
-<date>2020-12-11</date>
+<date>2020-12-17</date>
 <description>Helper functions for string operations</description>
 <tags>C81</tags>
 <help>
@@ -27,6 +27,9 @@ delimiter   - string, Delimiter (optional, default: &quot;,&quot;)
 
 Return:
 String value separating each array item by some delimiter.
+NOTE: For simply flattening a string array, use the built-in gretl
+function flatten which holds the strings in S, arranged one per line
+by default.
 
 
 strdrop():
@@ -91,6 +94,7 @@ Changelog:
     + Remove deprecated function strpos() as reported in version 0.21 - this
       function is superseded by gretl's built-in function instrings() which is
       available since gretl 2020a
+    + Change minimum version required from 2018a to 2019c.
 - 0.21, Januar 2020:
     + strpos() function also accepts and searches for empty string
       (length zero) in array S.
@@ -110,14 +114,7 @@ Changelog:
 if exists(delimiter) == FALSE
   delimiter = &quot;,&quot;
 endif
-string new_string
-loop foreach i S
-  new_string += sprintf(&quot;%s&quot;, &quot;$i&quot;)
-  if i &lt; nelem(S)
-    new_string += sprintf(&quot;%s&quot;, delimiter)
-  endif
-endloop
-return new_string
+return regsub(flatten(S), &quot;\n&quot;, delimiter)
 </code>
 </gretl-function>
 <gretl-function name="strdrop" type="strings">

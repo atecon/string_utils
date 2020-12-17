@@ -273,7 +273,6 @@ end function
 test_strflatten_w_delimiter()
 
 
-
 # TODO: Not yet implemented -- works only if "to_num = 1"
 /*
    nulldata 4

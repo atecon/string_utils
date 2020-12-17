@@ -18,6 +18,9 @@ delimiter   - string, Delimiter (optional, default: ",")
 
 Return:
 String value separating each array item by some delimiter.
+NOTE: For simply flattening a string array, use the built-in gretl
+function flatten which holds the strings in S, arranged one per line
+by default.
 
 
 strdrop():

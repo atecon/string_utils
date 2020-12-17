@@ -6,16 +6,7 @@ function string strflatten  (const strings S,
         delimiter = ","
     endif
 
-    string new_string
-
-    loop foreach i S
-        new_string += sprintf("%s", "$i")
-        if i < nelem(S)
-          new_string += sprintf("%s", delimiter)
-        endif
-    endloop
-
-    return new_string
+    return regsub(flatten(S), "\n", delimiter)
 end function
 
 

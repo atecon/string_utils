@@ -7,9 +7,12 @@
 <description>Helper functions for string operations</description>
 <tags>C81</tags>
 <help>
-This package is a collection of helper functions for various operations of string variables and string arrays which are not covered by gretl's built-in methods (yet).
+This package is a collection of helper functions for various operations of
+string variables and string arrays which are not covered by gretl's built-in
+methods (yet).
 
-Please ask questions and report bugs on the gretl mailing list if possible. Alternatively, create an issue ticket on the github repo (see below).
+Please ask questions and report bugs on the gretl mailing list if possible.
+Alternatively, create an issue ticket on the github repo (see below).
 Source code and test script(s) can be found here:
 https://github.com/atecon/string_utils
 
@@ -33,14 +36,17 @@ by default.
 
 
 strdrop():
-Drop a specific string 'drop_str' from string array 'S'. String 'drop_str' may occur multiple times.
+Drop a specific string 'drop_str' from string array 'S'. String 'drop_str'
+may occur multiple times.
 ----------
 Arguments:
 S           - string array, Input
 drop_str    - string, Pattern of string value to be dropped from S
 
 Return:
-Return string array excluding string 'drop_str' if present in S. If 'drop_str' is not present, the original array 'S' is returned instead. If string array 'S' has length zero, an empty array is returned.
+Return string array excluding string 'drop_str' if present in S. If 'drop_str'
+is not present, the original array 'S' is returned instead. If string
+array 'S' has length zero, an empty array is returned.
 
 
 struniq():
@@ -50,7 +56,9 @@ Arguments:
 S           - string array
 
 Return:
-Array containing the distinct elements of array S not sorted but in their order of appearance. If string array 'S' has length zero or at least one string element is of length zero, an empty string array is returned.
+Array containing the distinct elements of array S not sorted but in their
+order of appearance. If string array 'S' has length zero or at least one
+string element is of length zero, an empty string array is returned.
 
 
 strrepl():
@@ -65,7 +73,8 @@ Array containing string 'str' n-times. Also works for an empty string 'str'.
 
 
 strsandwich():
-Construct a string array. To each numerical value of x concatenate a string prefix 'pre' and a suffix 'post'.
+Construct a string array. To each numerical value of x concatenate a
+string prefix 'pre' and a suffix 'post'.
 ----------
 Arguments:
 x           - matrix
@@ -73,18 +82,22 @@ pre         - string, optional
 post        - string, optional
 
 Return:
-Array of length n=rows(vec(x)). Each string is a combination of the prefix 'pre', the i-th numerical value of x and the suffix 'post'.
+Array of length n=rows(vec(x)). Each string is a combination of the
+prefix 'pre', the i-th numerical value of x and the suffix 'post'.
 
 
 msortby_rowlabels():
-Sort rows of matrix X by re-ordering row-labels of X by string array 'rowlabels_new'.
+Sort rows of matrix X by re-ordering row-labels of X by string array
+'rowlabels_new'.
 ----------
 Arguments:
 X               - matrix, must include row-labels set by rnameset()
 rowlabels_new   - string array, re-order X' row-labels by this string
 
 Return:
-Matrix with sorted rows of X by 'rowlabels_new'. X must have row-labels. Also all elements in 'rowlabels_new' must be present in X' row-labels too, otherwise an empty matrix is returned (can be checked by &lt;nelem(matrix)&gt;).
+Matrix with sorted rows of X by 'rowlabels_new'. X must have row-labels.
+Also all elements in 'rowlabels_new' must be present in X' row-labels too,
+otherwise an empty matrix is returned (can be checked by &lt;nelem(matrix)&gt;).
 
 
 
@@ -92,8 +105,8 @@ Changelog:
 - 0.3, December 2020:
     + Add new strflatten() function
     + Remove deprecated function strpos() as reported in version 0.21 - this
-      function is superseded by gretl's built-in function instrings() which is
-      available since gretl 2020a
+      function is superseded by gretl's built-in function instrings()
+      which is available since gretl 2020a
     + Change minimum version required from 2018a to 2019c.
 - 0.21, Januar 2020:
     + strpos() function also accepts and searches for empty string
@@ -111,7 +124,7 @@ Changelog:
   <param name="delimiter" type="string" optional="true" const="true"/>
  </params>
 <code>/* Flatten string array to string. */
-if exists(delimiter) == FALSE
+if exists(delimiter) == 0
   delimiter = &quot;,&quot;
 endif
 return regsub(flatten(S), &quot;\n&quot;, delimiter)

@@ -2,7 +2,7 @@ function string strflatten  (const strings S,
                              const string delimiter[null])
     /* Flatten string array to string. */
 
-    if exists(delimiter) == FALSE
+    if exists(delimiter) == 0
         delimiter = ","
     endif
 

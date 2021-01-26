@@ -156,6 +156,50 @@ function strings strsandwich (matrix x,
 end function
 
 
+function scalar strprefix (const string target "Text being searched",
+                           const string prefix "Prefix to be searched")
+    /* Check whether 'target' starts with the prefix 'prefix'.
+    Return TRUE if 'target' starts with 'prefix', otherwise FALSE. */
+
+    if nelem(target) < nelem(prefix)
+       printf "\nWarning: 'prefix' cannot be longer than 'target'.\n" 
+       return FALSE
+    endif
+
+    string target_starts_with = substr(target, 1, nelem(prefix))
+
+    if target_starts_with == prefix
+        return TRUE
+    else
+        return FALSE
+    endif
+end function
+
+
+function scalar strsuffix (const string target "Text being searched",
+                           const string suffix "Suffix to be searched")
+    /* Check whether 'target' ends with the suffix 'suffix'.
+    Return TRUE if 'target' ends with 'suffix', otherwise FALSE. */
+
+    if nelem(target) < nelem(suffix)
+       printf "\nWarning: 'suffix' cannot be longer than 'target'.\n" 
+       return FALSE
+    endif
+
+    scalar n_chars_target = nelem(target)
+    scalar n_chars_suffix = nelem(suffix)
+    scalar start = 1 + n_chars_target - n_chars_suffix
+    scalar ende = n_chars_target
+    string target_ends_with = substr(target, start, ende)
+
+    if target_ends_with == suffix
+        return TRUE
+    else
+        return FALSE
+    endif
+end function
+
+
 # TODO: Not yet implemented -- works only if "to_num = 1"
 /*
    function series replace_strval (const series s,

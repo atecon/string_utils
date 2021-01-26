@@ -31,3 +31,15 @@ strings S2 = defarray("A", "B", "; ")
 eval strflatten(S1)
 eval strflatten(S2)
 
+
+string target = "ABCdev"
+string prefix1 = "ABC"
+string prefix2 = "CBA"
+eval strprefix(target, prefix1)
+eval strprefix(target, prefix2)
+
+string target = "ABCdev"
+string suffix1 = "dev"
+string suffix2 = "Cved"
+eval strsuffix(target, suffix1)
+eval strsuffix(target, suffix2)

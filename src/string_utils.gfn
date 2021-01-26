@@ -2,8 +2,8 @@
 <gretl-functions>
 <gretl-function-package name="string_utils" no-data-ok="true" minver="2019c">
 <author email="atecon@posteo.de">Artur Tarassow</author>
-<version>0.3</version>
-<date>2020-12-17</date>
+<version>0.4</version>
+<date>2021-01-26</date>
 <description>Helper functions for string operations</description>
 <tags>C81</tags>
 <help>
@@ -100,8 +100,31 @@ Also all elements in 'rowlabels_new' must be present in X' row-labels too,
 otherwise an empty matrix is returned (can be checked by &lt;nelem(matrix)&gt;).
 
 
+strprefix():
+Check whether 'target' starts with 'prefix'.
+----------
+Arguments:
+target      - string
+prefix      - int
+
+Return:
+TRUE if 'target' starts with 'prefix', otherwise FALSE.
+
+strsuffix():
+Check whether 'target' ends with 'suffix'.
+----------
+Arguments:
+target      - string
+suffix      - int
+
+Return:
+TRUE if 'target' ends with 'suffix', otherwise FALSE.
+
+
 
 Changelog:
+- 0.4, January 2021:
+    + Add new functions strprefix() and strsuffix()
 - 0.3, December 2020:
     + Add new strflatten() function
     + Remove deprecated function strpos() as reported in version 0.21 - this
@@ -274,6 +297,56 @@ endloop
 return ret
 </code>
 </gretl-function>
+<gretl-function name="strprefix" type="scalar">
+ <params count="2">
+  <param name="target" type="string" const="true">
+<description>Text being searched</description>
+  </param>
+  <param name="prefix" type="string" const="true">
+<description>Prefix to be searched</description>
+  </param>
+ </params>
+<code>/* Check whether 'target' starts with the prefix 'prefix'.
+Return TRUE if 'target' starts with 'prefix', otherwise FALSE. */
+if nelem(target) &lt; nelem(prefix)
+  printf &quot;\nWarning: 'prefix' cannot be longer than 'target'.\n&quot;
+  return FALSE
+endif
+string target_starts_with = substr(target, 1, nelem(prefix))
+if target_starts_with == prefix
+  return TRUE
+else
+  return FALSE
+endif
+</code>
+</gretl-function>
+<gretl-function name="strsuffix" type="scalar">
+ <params count="2">
+  <param name="target" type="string" const="true">
+<description>Text being searched</description>
+  </param>
+  <param name="suffix" type="string" const="true">
+<description>Suffix to be searched</description>
+  </param>
+ </params>
+<code>/* Check whether 'target' ends with the suffix 'suffix'.
+Return TRUE if 'target' ends with 'suffix', otherwise FALSE. */
+if nelem(target) &lt; nelem(suffix)
+  printf &quot;\nWarning: 'suffix' cannot be longer than 'target'.\n&quot;
+  return FALSE
+endif
+scalar n_chars_target = nelem(target)
+scalar n_chars_suffix = nelem(suffix)
+scalar start = 1 + n_chars_target - n_chars_suffix
+scalar ende = n_chars_target
+string target_ends_with = substr(target, start, ende)
+if target_ends_with == suffix
+  return TRUE
+else
+  return FALSE
+endif
+</code>
+</gretl-function>
 <sample-script>
 clear
 set verbose off
@@ -307,6 +380,19 @@ strings S1 = defarray(&quot;A&quot;, &quot;B&quot;)
 strings S2 = defarray(&quot;A&quot;, &quot;B&quot;, &quot;; &quot;)
 eval strflatten(S1)
 eval strflatten(S2)
+
+
+string target = &quot;ABCdev&quot;
+string prefix1 = &quot;ABC&quot;
+string prefix2 = &quot;CBA&quot;
+eval strprefix(target, prefix1)
+eval strprefix(target, prefix2)
+
+string target = &quot;ABCdev&quot;
+string suffix1 = &quot;dev&quot;
+string suffix2 = &quot;Cved&quot;
+eval strsuffix(target, suffix1)
+eval strsuffix(target, suffix2)
 </sample-script>
 </gretl-function-package>
 </gretl-functions>

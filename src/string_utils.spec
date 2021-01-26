@@ -6,6 +6,6 @@ description = Helper functions for string operations
 tags = C81
 min-version = 2019c
 data-requirement = no-data-ok
-public = strflatten strdrop strpos struniq strrepl msortby_rowlabels strsandwich strprefix strsuffix
+public = strflatten strdrop strpos struniq strrepl msortby_rowlabels strsandwich strstarts strends
 help = string_utils_help.txt
 sample-script = string_utils_sample.inp

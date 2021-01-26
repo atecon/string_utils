@@ -156,13 +156,13 @@ function strings strsandwich (matrix x,
 end function
 
 
-function scalar strprefix (const string target "Text being searched",
+function scalar strstarts (const string target "Text being searched",
                            const string prefix "Prefix to be searched")
     /* Check whether 'target' starts with the prefix 'prefix'.
     Return TRUE if 'target' starts with 'prefix', otherwise FALSE. */
 
     if nelem(target) < nelem(prefix)
-       printf "\nWarning: 'prefix' cannot be longer than 'target'.\n" 
+       printf "\nWarning: 'prefix' cannot be longer than 'target'.\n"
        return FALSE
     endif
 
@@ -176,13 +176,13 @@ function scalar strprefix (const string target "Text being searched",
 end function
 
 
-function scalar strsuffix (const string target "Text being searched",
+function scalar strends (const string target "Text being searched",
                            const string suffix "Suffix to be searched")
     /* Check whether 'target' ends with the suffix 'suffix'.
     Return TRUE if 'target' ends with 'suffix', otherwise FALSE. */
 
     if nelem(target) < nelem(suffix)
-       printf "\nWarning: 'suffix' cannot be longer than 'target'.\n" 
+       printf "\nWarning: 'suffix' cannot be longer than 'target'.\n"
        return FALSE
     endif
 

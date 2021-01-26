@@ -91,7 +91,7 @@ Also all elements in 'rowlabels_new' must be present in X' row-labels too,
 otherwise an empty matrix is returned (can be checked by <nelem(matrix)>).
 
 
-strprefix():
+strstarts():
 Check whether 'target' starts with 'prefix'.
 ----------
 Arguments:
@@ -101,7 +101,7 @@ prefix      - int
 Return:
 TRUE if 'target' starts with 'prefix', otherwise FALSE.
 
-strsuffix():
+strends():
 Check whether 'target' ends with 'suffix'.
 ----------
 Arguments:
@@ -115,7 +115,7 @@ TRUE if 'target' ends with 'suffix', otherwise FALSE.
 
 Changelog:
 - 0.4, January 2021:
-    + Add new functions strprefix() and strsuffix()
+    + Add new functions strstarts() and strends()
 - 0.3, December 2020:
     + Add new strflatten() function
     + Remove deprecated function strpos() as reported in version 0.21 - this

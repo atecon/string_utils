@@ -100,7 +100,7 @@ Also all elements in 'rowlabels_new' must be present in X' row-labels too,
 otherwise an empty matrix is returned (can be checked by &lt;nelem(matrix)&gt;).
 
 
-strprefix():
+strstarts():
 Check whether 'target' starts with 'prefix'.
 ----------
 Arguments:
@@ -110,7 +110,7 @@ prefix      - int
 Return:
 TRUE if 'target' starts with 'prefix', otherwise FALSE.
 
-strsuffix():
+strends():
 Check whether 'target' ends with 'suffix'.
 ----------
 Arguments:
@@ -124,7 +124,7 @@ TRUE if 'target' ends with 'suffix', otherwise FALSE.
 
 Changelog:
 - 0.4, January 2021:
-    + Add new functions strprefix() and strsuffix()
+    + Add new functions strstarts() and strends()
 - 0.3, December 2020:
     + Add new strflatten() function
     + Remove deprecated function strpos() as reported in version 0.21 - this
@@ -297,7 +297,7 @@ endloop
 return ret
 </code>
 </gretl-function>
-<gretl-function name="strprefix" type="scalar">
+<gretl-function name="strstarts" type="scalar">
  <params count="2">
   <param name="target" type="string" const="true">
 <description>Text being searched</description>
@@ -320,7 +320,7 @@ else
 endif
 </code>
 </gretl-function>
-<gretl-function name="strsuffix" type="scalar">
+<gretl-function name="strends" type="scalar">
  <params count="2">
   <param name="target" type="string" const="true">
 <description>Text being searched</description>
@@ -385,14 +385,14 @@ eval strflatten(S2)
 string target = &quot;ABCdev&quot;
 string prefix1 = &quot;ABC&quot;
 string prefix2 = &quot;CBA&quot;
-eval strprefix(target, prefix1)
-eval strprefix(target, prefix2)
+eval strstarts(target, prefix1)
+eval strstarts(target, prefix2)
 
 string target = &quot;ABCdev&quot;
 string suffix1 = &quot;dev&quot;
 string suffix2 = &quot;Cved&quot;
-eval strsuffix(target, suffix1)
-eval strsuffix(target, suffix2)
+eval strends(target, suffix1)
+eval strends(target, suffix2)
 </sample-script>
 </gretl-function-package>
 </gretl-functions>

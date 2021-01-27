@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <gretl-functions>
-<gretl-function-package name="string_utils" no-data-ok="true" minver="2019c">
+<gretl-function-package name="string_utils" no-data-ok="true" minver="2020b">
 <author email="atecon@posteo.de">Artur Tarassow</author>
 <version>0.4</version>
-<date>2021-01-26</date>
+<date>2021-01-27</date>
 <description>Helper functions for string operations</description>
 <tags>C81</tags>
 <help>
@@ -105,7 +105,7 @@ Check whether 'target' starts with 'prefix'.
 ----------
 Arguments:
 target      - string
-prefix      - int
+prefix      - string
 
 Return:
 TRUE if 'target' starts with 'prefix', otherwise FALSE.
@@ -115,7 +115,7 @@ Check whether 'target' ends with 'suffix'.
 ----------
 Arguments:
 target      - string
-suffix      - int
+suffix      - string
 
 Return:
 TRUE if 'target' ends with 'suffix', otherwise FALSE.
@@ -125,6 +125,7 @@ TRUE if 'target' ends with 'suffix', otherwise FALSE.
 Changelog:
 - 0.4, January 2021:
     + Add new functions strstarts() and strends()
+    + Change minimum version required from 2019c to 2020b.
 - 0.3, December 2020:
     + Add new strflatten() function
     + Remove deprecated function strpos() as reported in version 0.21 - this

@@ -318,7 +318,6 @@ end function
 test_strends(Params)
 
 
-
 bundles Params = null
 Params = Params + _(input = "ABc", expected = "Abc")
 Params = Params + _(input = " ABc", expected = " abc")
@@ -331,8 +330,8 @@ function void test_capitalize (const bundles P)
 
     loop foreach i P
         # Given + When
-        matrix actual = capitalize(P[i].input)
-        matrix expected = P[i].expected
+        string actual = capitalize(P[i].input)
+        string expected = P[i].expected
 
         # Then
         assert(actual == expected)
@@ -340,6 +339,77 @@ function void test_capitalize (const bundles P)
 end function
 test_capitalize(Params)
 
+
+bundles Params = null
+Params = Params + _(input = "ABc", expected = "Abc")
+Params = Params + _(input = " ABc", expected = "Abc")
+Params = Params + _(input = " ABc ", expected = "Abc")
+Params = Params + _(input = "", expected = "")
+Params = Params + _(input = " ", expected = "")
+Params = Params + _(input = "ABc dEf", expected = "Abc Def")
+Params = Params + _(input = " ABc dEf ", expected = "Abc Def")
+Params = Params + _(input = " ABc  dEf", expected = "Abc Def")
+function void test_titlecase (const bundles P)
+    print "Start testing titlecase()."
+
+    loop foreach i P
+        # Given + When
+        string actual = titlecase(P[i].input)
+        string expected = P[i].expected
+
+        # Then
+        assert(actual == expected)
+    endloop
+end function
+test_titlecase(Params)
+
+
+bundles Params = null
+Params = Params + _(input = "ABc", expected = "Abc")
+Params = Params + _(input = " ABc", expected = "Abc")
+Params = Params + _(input = " ABc ", expected = "Abc")
+Params = Params + _(input = "", expected = "")
+Params = Params + _(input = " ", expected = "")
+Params = Params + _(input = "ABc dEf", expected = "AbcDef")
+Params = Params + _(input = " ABc dEf ", expected = "AbcDef")
+Params = Params + _(input = " ABc  dEf", expected = "AbcDef")
+function void test_camelcase (const bundles P)
+    print "Start testing camelcase()."
+
+    loop foreach i P
+        # Given + When
+        string actual = camelcase(P[i].input)
+        string expected = P[i].expected
+
+        # Then
+        assert(actual == expected)
+    endloop
+end function
+test_camelcase(Params)
+
+
+bundles Params = null
+Params = Params + _(input = "ABc", find = "A", expected = 1)
+Params = Params + _(input = "ABc", find = "c", expected = 3)
+Params = Params + _(input = "ABc", find = "a", expected = 0)
+Params = Params + _(input = "ABc", find = "d", expected = 0)
+Params = Params + _(input = "ABc", find = "", expected = 0)
+Params = Params + _(input = "ABc", find = " ", expected = 0)
+Params = Params + _(input = "ABc ", find = " ", expected = 4)
+Params = Params + _(input = " ABc ", find = " ", expected = 1)
+function void test_find (const bundles P)
+    print "Start testing find()."
+
+    loop foreach i P
+        # Given + When
+        scalar actual = find(P[i].input, P[i].find)
+        scalar expected = P[i].expected
+
+        # Then
+        assert(actual == expected)
+    endloop
+end function
+test_find(Params)
 
 
 

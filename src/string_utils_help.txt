@@ -12,18 +12,56 @@ https://github.com/atecon/string_utils
 Public functions:
 -----------------
 
-strflatten():
-Flatten an array of strings to a string separated by some delimiter.
+camelcase(string input):
+Camel-case is a capitalization of the first letter (and the remaining letters
+are lowercase) before concatenating each of the space-separated words to a
+single word. Words of the 'input' variable are expected to be separated by space.
+Eventual spaces at the beginning or end of the string are removed before return.
 ----------
 Arguments:
-S           - string array, Input string array
-delimiter   - string, Delimiter (optional, default: ",")
+input   - string, Input string
 
 Return:
-String value separating each array item by some delimiter.
-NOTE: For simply flattening a string array, use the built-in gretl
-function flatten which holds the strings in S, arranged one per line
-by default.
+String in camel-case format.
+
+
+capitalize(string input):
+Convert first letter of a string to uppercase and other letters to lowercase.
+Eventual spaces will not be removed before return.
+----------
+Arguments:
+input   - string, String to be capitalized
+
+Return:
+Returns capitalized string.
+
+
+find(const string search, const string find):
+Finds a substring in a string and returns the index of the substring. Eventual
+spaces are not ignored. If 'find' exists multiple times, the position of its first
+occurrence is returned.
+----------
+Arguments:
+input   - string, String to be searched
+output  - string, String to find
+
+Return:
+Position of the 'find' string within the search string. In case, 'find' is not
+found in the 'search string, the scalar value 0 is returned.
+
+
+msortby_rowlabels():
+Sort rows of matrix X by re-ordering row-labels of X by string array
+'rowlabels_new'.
+----------
+Arguments:
+X               - matrix, must include row-labels set by rnameset()
+rowlabels_new   - string array, re-order X' row-labels by this string
+
+Return:
+Matrix with sorted rows of X by 'rowlabels_new'. X must have row-labels.
+Also all elements in 'rowlabels_new' must be present in X' row-labels too,
+otherwise an empty matrix is returned (can be checked by <nelem(matrix)>).
 
 
 strdrop():
@@ -40,16 +78,18 @@ is not present, the original array 'S' is returned instead. If string
 array 'S' has length zero, an empty array is returned.
 
 
-struniq():
-Get the unique string values of string array S.
+strflatten():
+Flatten an array of strings to a string separated by some delimiter.
 ----------
 Arguments:
-S           - string array
+S           - string array, Input string array
+delimiter   - string, Delimiter (optional, default: ",")
 
 Return:
-Array containing the distinct elements of array S not sorted but in their
-order of appearance. If string array 'S' has length zero or at least one
-string element is of length zero, an empty string array is returned.
+String value separating each array item by some delimiter.
+NOTE: For simply flattening a string array, use the built-in gretl
+function flatten which holds the strings in S, arranged one per line
+by default.
 
 
 strrepl():
@@ -77,20 +117,6 @@ Array of length n=rows(vec(x)). Each string is a combination of the
 prefix 'pre', the i-th numerical value of x and the suffix 'post'.
 
 
-msortby_rowlabels():
-Sort rows of matrix X by re-ordering row-labels of X by string array
-'rowlabels_new'.
-----------
-Arguments:
-X               - matrix, must include row-labels set by rnameset()
-rowlabels_new   - string array, re-order X' row-labels by this string
-
-Return:
-Matrix with sorted rows of X by 'rowlabels_new'. X must have row-labels.
-Also all elements in 'rowlabels_new' must be present in X' row-labels too,
-otherwise an empty matrix is returned (can be checked by <nelem(matrix)>).
-
-
 strstarts():
 Check whether 'target' starts with 'prefix'.
 ----------
@@ -112,8 +138,34 @@ Return:
 TRUE if 'target' ends with 'suffix', otherwise FALSE.
 
 
+struniq():
+Get the unique string values of string array S.
+----------
+Arguments:
+S           - string array
+
+Return:
+Array containing the distinct elements of array S not sorted but in their
+order of appearance. If string array 'S' has length zero or at least one
+string element is of length zero, an empty string array is returned.
+
+
+titlecase(string input):
+The titlecase is a capitalization style used for titles so that the first letter
+of each word is uppercase and the remaining letters are lowercase. Words are
+expected to be separated by space. Space at the beginning or end of the string
+are removed.
+----------
+Arguments:
+input   - string, Input string
+
+Return:
+"titlelized" string.
+
 
 Changelog:
+- 0.5, April 2022:
+    + Add new functions capitalize(), camelcase(), titlecase() and find()
 - 0.4, January 2021:
     + Add new functions strstarts() and strends()
     + Change minimum version required from 2019c to 2020b.

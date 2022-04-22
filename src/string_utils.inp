@@ -200,6 +200,72 @@ function scalar strends (const string target "Text being searched",
 end function
 
 
+function string capitalize (string input)
+    /* Convert first letter to uppercase and other letters to lowercase.
+    return: string, Capitalized */
+
+    input = tolower(input)
+
+    if nelem(input) == 0
+        return input
+    endif
+    input = nelem(input) == 1 ? toupper(input[1]) : toupper(input[1]) ~ input[2:]
+
+    return input
+end function
+
+
+function string camelcase (string input)
+    /* The titlecase is a capitalization style used for titles so that the first
+    letter of each word is uppercase and the remaining letters are lowercase.
+    return: string, titlecase */
+
+    return titlecase(input, FALSE)
+end function
+
+
+function string titlecase (const string input, const bool add_space[TRUE])
+    /* The titlecase is a capitalization style used for titles so that the first
+    letter of each word is uppercase and the remaining letters are lowercase.
+    return: string, titlecase */
+
+    strings Inputs = strsplit(input, " ")
+    string ret
+
+    loop foreach i Inputs
+        ret += sprintf("%s", capitalize("$i"))
+        if i < nelem(Inputs) && add_space == TRUE
+            ret += " "
+        endif
+    endloop
+
+    return ret
+end function
+
+
+function scalar find (const string search, const string find)
+    /* Finds a substring in a string and returns the index of the substring.
+    return: scalar, Position of the string. If 'find' is not found, return 0 value.
+    Eventual spaces are not ignored. */
+
+    if !nelem(search) || !nelem(find)
+        print "Warning: Both the searched string and the find string must be at least of length one."
+        return 0
+    endif
+
+    string match = strstr(search, find)
+    scalar ret = 0
+
+    if match != ""
+        ret = 1 + strlen(search) - strlen(match)
+    endif
+
+    return ret
+end function
+
+
+
+
 # TODO: Not yet implemented -- works only if "to_num = 1"
 /*
    function series replace_strval (const series s,

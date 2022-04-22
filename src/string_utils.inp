@@ -177,7 +177,7 @@ end function
 
 
 function scalar strends (const string target "Text being searched",
-                           const string suffix "Suffix to be searched")
+                         const string suffix "Suffix to be searched")
     /* Check whether 'target' ends with the suffix 'suffix'.
     Return TRUE if 'target' ends with 'suffix', otherwise FALSE. */
 

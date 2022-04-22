@@ -320,26 +320,25 @@ test_strends(Params)
 
 
 bundles Params = null
-Params = Params + _(target = "ABCdev", suffix = "dev", expected = TRUE)
-Params = Params + _(target = "ABCdev", suffix = "devABC", expected = FALSE)
-Params = Params + _(target = "ABCdev", suffix = "ABDdev", expected = FALSE)
-Params = Params + _(target = " ABCdev", suffix = " Cdev", expected = FALSE)
-Params = Params + _(target = " ABCdev", suffix = "dev", expected = TRUE)
-Params = Params + _(target = " A 37s!", suffix = "7s!", expected = TRUE)
-Params = Params + _(target = "ABC", suffix = "ABC!", expected = FALSE)
-function void test_strends (const bundles P)
-    print "Start testing strends()."
+Params = Params + _(input = "ABc", expected = "Abc")
+Params = Params + _(input = " ABc", expected = " abc")
+Params = Params + _(input = " ABc ", expected = " abc ")
+Params = Params + _(input = "", expected = "")
+Params = Params + _(input = " ", expected = " ")
+
+function void test_capitalize (const bundles P)
+    print "Start testing capitalize()."
 
     loop foreach i P
         # Given + When
-        matrix actual = strends(P[i].target, P[i].suffix)
+        matrix actual = capitalize(P[i].input)
         matrix expected = P[i].expected
 
         # Then
         assert(actual == expected)
     endloop
 end function
-test_strends(Params)
+test_capitalize(Params)
 
 
 

@@ -273,13 +273,13 @@ end function
 test_strflatten_w_delimiter()
 
 
-bundles Parameters = null
-Parameters = Parameters + _(target = "ABCdev", prefix = "ABC", expected = TRUE)
-Parameters = Parameters + _(target = "ABCdev", prefix = "ABD", expected = FALSE)
-Parameters = Parameters + _(target = " ABCdev", prefix = " ABCdev", expected = TRUE)
-Parameters = Parameters + _(target = " ABCdev", prefix = "ABCdev", expected = FALSE)
-Parameters = Parameters + _(target = " A 37s!", prefix = " A 37s!", expected = TRUE)
-Parameters = Parameters + _(target = "ABC", prefix = "ABCD!", expected = FALSE)
+bundles Params = null
+Params = Params + _(target = "ABCdev", prefix = "ABC", expected = TRUE)
+Params = Params + _(target = "ABCdev", prefix = "ABD", expected = FALSE)
+Params = Params + _(target = " ABCdev", prefix = " ABCdev", expected = TRUE)
+Params = Params + _(target = " ABCdev", prefix = "ABCdev", expected = FALSE)
+Params = Params + _(target = " A 37s!", prefix = " A 37s!", expected = TRUE)
+Params = Params + _(target = "ABC", prefix = "ABCD!", expected = FALSE)
 function void test_strstarts (const bundles P)
     print "Start testing strstarts()."
 
@@ -292,17 +292,17 @@ function void test_strstarts (const bundles P)
         assert(actual == expected)
     endloop
 end function
-test_strstarts(Parameters)
+test_strstarts(Params)
 
 
-bundles Parameters = null
-Parameters = Parameters + _(target = "ABCdev", suffix = "dev", expected = TRUE)
-Parameters = Parameters + _(target = "ABCdev", suffix = "devABC", expected = FALSE)
-Parameters = Parameters + _(target = "ABCdev", suffix = "ABDdev", expected = FALSE)
-Parameters = Parameters + _(target = " ABCdev", suffix = " Cdev", expected = FALSE)
-Parameters = Parameters + _(target = " ABCdev", suffix = "dev", expected = TRUE)
-Parameters = Parameters + _(target = " A 37s!", suffix = "7s!", expected = TRUE)
-Parameters = Parameters + _(target = "ABC", suffix = "ABC!", expected = FALSE)
+bundles Params = null
+Params = Params + _(target = "ABCdev", suffix = "dev", expected = TRUE)
+Params = Params + _(target = "ABCdev", suffix = "devABC", expected = FALSE)
+Params = Params + _(target = "ABCdev", suffix = "ABDdev", expected = FALSE)
+Params = Params + _(target = " ABCdev", suffix = " Cdev", expected = FALSE)
+Params = Params + _(target = " ABCdev", suffix = "dev", expected = TRUE)
+Params = Params + _(target = " A 37s!", suffix = "7s!", expected = TRUE)
+Params = Params + _(target = "ABC", suffix = "ABC!", expected = FALSE)
 function void test_strends (const bundles P)
     print "Start testing strends()."
 
@@ -315,7 +315,32 @@ function void test_strends (const bundles P)
         assert(actual == expected)
     endloop
 end function
-test_strends(Parameters)
+test_strends(Params)
+
+
+
+bundles Params = null
+Params = Params + _(target = "ABCdev", suffix = "dev", expected = TRUE)
+Params = Params + _(target = "ABCdev", suffix = "devABC", expected = FALSE)
+Params = Params + _(target = "ABCdev", suffix = "ABDdev", expected = FALSE)
+Params = Params + _(target = " ABCdev", suffix = " Cdev", expected = FALSE)
+Params = Params + _(target = " ABCdev", suffix = "dev", expected = TRUE)
+Params = Params + _(target = " A 37s!", suffix = "7s!", expected = TRUE)
+Params = Params + _(target = "ABC", suffix = "ABC!", expected = FALSE)
+function void test_strends (const bundles P)
+    print "Start testing strends()."
+
+    loop foreach i P
+        # Given + When
+        matrix actual = strends(P[i].target, P[i].suffix)
+        matrix expected = P[i].expected
+
+        # Then
+        assert(actual == expected)
+    endloop
+end function
+test_strends(Params)
+
 
 
 

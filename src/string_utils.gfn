@@ -2,8 +2,8 @@
 <gretl-functions>
 <gretl-function-package name="string_utils" no-data-ok="true" minver="2020b">
 <author email="atecon@posteo.de">Artur Tarassow</author>
-<version>0.4</version>
-<date>2021-01-27</date>
+<version>0.5</version>
+<date>2022-04-22</date>
 <description>Helper functions for string operations</description>
 <tags>C81</tags>
 <help>
@@ -21,18 +21,56 @@ https://github.com/atecon/string_utils
 Public functions:
 -----------------
 
-strflatten():
-Flatten an array of strings to a string separated by some delimiter.
+camelcase(string input):
+Camel-case is a capitalization of the first letter (and the remaining letters
+are lowercase) before concatenating each of the space-separated words to a
+single word. Words of the 'input' variable are expected to be separated by space.
+Eventual spaces at the beginning or end of the string are removed before return.
 ----------
 Arguments:
-S           - string array, Input string array
-delimiter   - string, Delimiter (optional, default: &quot;,&quot;)
+input   - string, Input string
 
 Return:
-String value separating each array item by some delimiter.
-NOTE: For simply flattening a string array, use the built-in gretl
-function flatten which holds the strings in S, arranged one per line
-by default.
+String in camel-case format.
+
+
+capitalize(string input):
+Convert first letter of a string to uppercase and other letters to lowercase.
+Eventual spaces will not be removed before return.
+----------
+Arguments:
+input   - string, String to be capitalized
+
+Return:
+Returns capitalized string.
+
+
+find(const string search, const string find):
+Finds a substring in a string and returns the index of the substring. Eventual
+spaces are not ignored. If 'find' exists multiple times, the position of its first
+occurrence is returned.
+----------
+Arguments:
+input   - string, String to be searched
+output  - string, String to find
+
+Return:
+Position of the 'find' string within the search string. In case, 'find' is not
+found in the 'search string, the scalar value 0 is returned.
+
+
+msortby_rowlabels():
+Sort rows of matrix X by re-ordering row-labels of X by string array
+'rowlabels_new'.
+----------
+Arguments:
+X               - matrix, must include row-labels set by rnameset()
+rowlabels_new   - string array, re-order X' row-labels by this string
+
+Return:
+Matrix with sorted rows of X by 'rowlabels_new'. X must have row-labels.
+Also all elements in 'rowlabels_new' must be present in X' row-labels too,
+otherwise an empty matrix is returned (can be checked by &lt;nelem(matrix)&gt;).
 
 
 strdrop():
@@ -49,16 +87,18 @@ is not present, the original array 'S' is returned instead. If string
 array 'S' has length zero, an empty array is returned.
 
 
-struniq():
-Get the unique string values of string array S.
+strflatten():
+Flatten an array of strings to a string separated by some delimiter.
 ----------
 Arguments:
-S           - string array
+S           - string array, Input string array
+delimiter   - string, Delimiter (optional, default: &quot;,&quot;)
 
 Return:
-Array containing the distinct elements of array S not sorted but in their
-order of appearance. If string array 'S' has length zero or at least one
-string element is of length zero, an empty string array is returned.
+String value separating each array item by some delimiter.
+NOTE: For simply flattening a string array, use the built-in gretl
+function flatten which holds the strings in S, arranged one per line
+by default.
 
 
 strrepl():
@@ -86,20 +126,6 @@ Array of length n=rows(vec(x)). Each string is a combination of the
 prefix 'pre', the i-th numerical value of x and the suffix 'post'.
 
 
-msortby_rowlabels():
-Sort rows of matrix X by re-ordering row-labels of X by string array
-'rowlabels_new'.
-----------
-Arguments:
-X               - matrix, must include row-labels set by rnameset()
-rowlabels_new   - string array, re-order X' row-labels by this string
-
-Return:
-Matrix with sorted rows of X by 'rowlabels_new'. X must have row-labels.
-Also all elements in 'rowlabels_new' must be present in X' row-labels too,
-otherwise an empty matrix is returned (can be checked by &lt;nelem(matrix)&gt;).
-
-
 strstarts():
 Check whether 'target' starts with 'prefix'.
 ----------
@@ -121,8 +147,34 @@ Return:
 TRUE if 'target' ends with 'suffix', otherwise FALSE.
 
 
+struniq():
+Get the unique string values of string array S.
+----------
+Arguments:
+S           - string array
+
+Return:
+Array containing the distinct elements of array S not sorted but in their
+order of appearance. If string array 'S' has length zero or at least one
+string element is of length zero, an empty string array is returned.
+
+
+titlecase(string input):
+The titlecase is a capitalization style used for titles so that the first letter
+of each word is uppercase and the remaining letters are lowercase. Words are
+expected to be separated by space. Space at the beginning or end of the string
+are removed.
+----------
+Arguments:
+input   - string, Input string
+
+Return:
+&quot;titlelized&quot; string.
+
 
 Changelog:
+- 0.5, April 2022:
+    + Add new functions capitalize(), camelcase(), titlecase() and find()
 - 0.4, January 2021:
     + Add new functions strstarts() and strends()
     + Change minimum version required from 2019c to 2020b.
@@ -142,97 +194,48 @@ Changelog:
 - 0.1, December 2019:
     + initial release
 </help>
-<gretl-function name="strflatten" type="string">
- <params count="2">
-  <param name="S" type="strings" const="true"/>
-  <param name="delimiter" type="string" optional="true" const="true"/>
- </params>
-<code>/* Flatten string array to string. */
-if exists(delimiter) == 0
-  delimiter = &quot;,&quot;
-endif
-return regsub(flatten(S), &quot;\n&quot;, delimiter)
-</code>
-</gretl-function>
-<gretl-function name="strdrop" type="strings">
- <params count="2">
-  <param name="S" type="strings" const="true"/>
-  <param name="drop_str" type="string" const="true"/>
- </params>
-<code>/* Drop a specific string from string array. String may occur multiple times. */
-strings ret = array(0)
-if strlen(drop_str) == 0
-  return S
-elif nelem(S) == 0
-  return ret
-else
-  loop i=1..nelem(S) -q
-    if S[i] != drop_str
-      ret += S[i]
-    endif
-  endloop
-endif
-return ret
-</code>
-</gretl-function>
-<gretl-function name="strpos" type="matrix">
- <params count="3">
-  <param name="S" type="strings" const="true">
-<description>Array of strings</description>
-  </param>
-  <param name="search_pattern" type="string" const="true">
-<description>String being searched for in S</description>
-  </param>
-  <param name="print_warning" type="bool" default="1" const="true"/>
- </params>
-<code>/* Returns the positional entries of string in S in a column vector */
-matrix ret = {}
-loop i=1..nelem(S) -q
-  if S[i] == search_pattern
-    ret |= $i
-  endif
-endloop
-return ret
-</code>
-</gretl-function>
-<gretl-function name="struniq" type="strings">
+<gretl-function name="capitalize" type="string">
  <params count="1">
-  <param name="S" type="strings" const="true"/>
+  <param name="input" type="string"/>
  </params>
-<code>/* Returns an array containing the distinct elements
-of S not sorted but in their order of appearance. */
-strings suniq = array(0)
-scalar error = 0
-if nelem(S) &amp;&amp; strlen(S[1])
-  strings suniq = defarray(S[1])
-  loop i=2..nelem(S) -q
-    if strlen(S[i]) == 0
-      error++
-      break
-    endif
-    if nelem( strpos(suniq, S[i], 0) ) == 0
-      suniq += S[i]
-    endif
-  endloop
-  if error
-    #printf &quot;\nWarning: At least one element in string array has length zero. Not allowed.\n&quot;
-    return array(0)
-  endif
+<code>/* Convert first letter to uppercase and other letters to lowercase.
+return: string, Capitalized */
+input = tolower(input)
+if nelem(input) == 0
+  return input
 endif
-return suniq
+input = nelem(input) == 1 ? toupper(input[1]) : toupper(input[1]) ~ input[2:]
+return input
 </code>
 </gretl-function>
-<gretl-function name="strrepl" type="strings">
- <params count="2">
-  <param name="str" type="string" const="true"/>
-  <param name="n" type="int" min="1" const="true"/>
+<gretl-function name="camelcase" type="string">
+ <params count="1">
+  <param name="input" type="string"/>
  </params>
-<code>/* Construct string array holding a constant string n times. */
-strings S = array(n)
-loop i=1..n -q
-  S[i] = str
-endloop
-return S
+<code>/* The titlecase is a capitalization style used for titles so that the first
+letter of each word is uppercase and the remaining letters are lowercase.
+return: string, titlecase */
+return titlecase(input, FALSE)
+</code>
+</gretl-function>
+<gretl-function name="find" type="scalar">
+ <params count="2">
+  <param name="search" type="string" const="true"/>
+  <param name="find" type="string" const="true"/>
+ </params>
+<code>/* Finds a substring in a string and returns the index of the substring.
+return: scalar, Position of the string. If 'find' is not found, return 0 value.
+Eventual spaces are not ignored. */
+if !nelem(search) || !nelem(find)
+  print &quot;Warning: Both the searched string and the find string must be at least of length one.&quot;
+  return 0
+endif
+string match = strstr(search, find)
+scalar ret = 0
+if match != &quot;&quot;
+  ret = 1 + strlen(search) - strlen(match)
+endif
+return ret
 </code>
 </gretl-function>
 <gretl-function name="msortby_rowlabels" type="matrix">
@@ -271,6 +274,52 @@ rnameset(ret, rowlabels_new)
 return ret
 </code>
 </gretl-function>
+<gretl-function name="strdrop" type="strings">
+ <params count="2">
+  <param name="S" type="strings" const="true"/>
+  <param name="drop_str" type="string" const="true"/>
+ </params>
+<code>/* Drop a specific string from string array. String may occur multiple times. */
+strings ret = array(0)
+if strlen(drop_str) == 0
+  return S
+elif nelem(S) == 0
+  return ret
+else
+  loop i=1..nelem(S) -q
+    if S[i] != drop_str
+      ret += S[i]
+    endif
+  endloop
+endif
+return ret
+</code>
+</gretl-function>
+<gretl-function name="strflatten" type="string">
+ <params count="2">
+  <param name="S" type="strings" const="true"/>
+  <param name="delimiter" type="string" optional="true" const="true"/>
+ </params>
+<code>/* Flatten string array to string. */
+if exists(delimiter) == 0
+  delimiter = &quot;,&quot;
+endif
+return regsub(flatten(S), &quot;\n&quot;, delimiter)
+</code>
+</gretl-function>
+<gretl-function name="strrepl" type="strings">
+ <params count="2">
+  <param name="str" type="string" const="true"/>
+  <param name="n" type="int" min="1" const="true"/>
+ </params>
+<code>/* Construct string array holding a constant string n times. */
+strings S = array(n)
+loop i=1..n -q
+  S[i] = str
+endloop
+return S
+</code>
+</gretl-function>
 <gretl-function name="strsandwich" type="strings">
  <params count="3">
   <param name="x" type="matrix"/>
@@ -294,6 +343,26 @@ if !exists(post)
 endif
 loop i=1..n -q
   ret[i] = sprintf(&quot;%s%d%s&quot;, pre, x[i], post)
+endloop
+return ret
+</code>
+</gretl-function>
+<gretl-function name="strpos" type="matrix">
+ <params count="3">
+  <param name="S" type="strings" const="true">
+<description>Array of strings</description>
+  </param>
+  <param name="search_pattern" type="string" const="true">
+<description>String being searched for in S</description>
+  </param>
+  <param name="print_warning" type="bool" default="1" const="true"/>
+ </params>
+<code>/* Returns the positional entries of string in S in a column vector */
+matrix ret = {}
+loop i=1..nelem(S) -q
+  if S[i] == search_pattern
+    ret |= $i
+  endif
 endloop
 return ret
 </code>
@@ -348,6 +417,52 @@ else
 endif
 </code>
 </gretl-function>
+<gretl-function name="struniq" type="strings">
+ <params count="1">
+  <param name="S" type="strings" const="true"/>
+ </params>
+<code>/* Returns an array containing the distinct elements
+of S not sorted but in their order of appearance. */
+strings suniq = array(0)
+scalar error = 0
+if nelem(S) &amp;&amp; strlen(S[1])
+  strings suniq = defarray(S[1])
+  loop i=2..nelem(S) -q
+    if strlen(S[i]) == 0
+      error++
+      break
+    endif
+    if nelem( strpos(suniq, S[i], 0) ) == 0
+      suniq += S[i]
+    endif
+  endloop
+  if error
+    #printf &quot;\nWarning: At least one element in string array has length zero. Not allowed.\n&quot;
+    return array(0)
+  endif
+endif
+return suniq
+</code>
+</gretl-function>
+<gretl-function name="titlecase" type="string">
+ <params count="2">
+  <param name="input" type="string" const="true"/>
+  <param name="add_space" type="bool" default="1" const="true"/>
+ </params>
+<code>/* The titlecase is a capitalization style used for titles so that the first
+letter of each word is uppercase and the remaining letters are lowercase.
+return: string, titlecase */
+strings Inputs = strsplit(input, &quot; &quot;)
+string ret
+loop foreach i Inputs
+  ret += sprintf(&quot;%s&quot;, capitalize(&quot;$i&quot;))
+  if i &lt; nelem(Inputs) &amp;&amp; add_space == TRUE
+    ret += &quot; &quot;
+  endif
+endloop
+return ret
+</code>
+</gretl-function>
 <sample-script>
 clear
 set verbose off
@@ -394,6 +509,24 @@ string suffix1 = &quot;dev&quot;
 string suffix2 = &quot;Cved&quot;
 eval strends(target, suffix1)
 eval strends(target, suffix2)
+
+
+# Capitalize first letter
+string input = &quot;abc def&quot;
+eval capitalize(input)
+
+# &quot;Titlelize&quot; string
+string input = &quot;abc def&quot;
+eval titlecase(input)
+
+# Camelcase string
+string input = &quot;abc def&quot;
+eval camelcase(input)
+
+# Find position of a substring within a string
+string search = &quot;abc def&quot;
+string find = &quot;e&quot;
+eval find(search, find)
 </sample-script>
 </gretl-function-package>
 </gretl-functions>

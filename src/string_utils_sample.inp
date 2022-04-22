@@ -43,3 +43,21 @@ string suffix1 = "dev"
 string suffix2 = "Cved"
 eval strends(target, suffix1)
 eval strends(target, suffix2)
+
+
+# Capitalize first letter
+string input = "abc def"
+eval capitalize(input)
+
+# "Titlelize" string
+string input = "abc def"
+eval titlecase(input)
+
+# Camelcase string
+string input = "abc def"
+eval camelcase(input)
+
+# Find position of a substring within a string
+string search = "abc def"
+string find = "e"
+eval find(search, find)

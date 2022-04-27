@@ -201,7 +201,8 @@ Return:
 
 Changelog:
 - 0.5, April 2022:
-    + Add new functions capitalize(), camelcase(), snakecase(), titlecase() and find()
+    + Add new functions capitalize(), camelcase(), snakecase(), titlecase() and
+    find()
 - 0.4, January 2021:
     + Add new functions strstarts() and strends()
     + Change minimum version required from 2019c to 2020b.

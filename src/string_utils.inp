@@ -10,18 +10,18 @@ function string strflatten  (const strings S,
 end function
 
 
-function strings strdrop (const strings S, const string drop_str)
+function strings strdrop (const strings S, const string pattern)
     /* Drop a specific string from string array. String may occur multiple times. */
 
     strings ret = array(0)
 
-    if strlen(drop_str) == 0
+    if strlen(pattern) == 0
         return S
     elif nelem(S) == 0
         return ret
     else
         loop i=1..nelem(S) -q
-            if S[i] != drop_str
+            if S[i] != pattern
                 ret += S[i]
             endif
         endloop
@@ -157,18 +157,18 @@ end function
 
 
 function scalar strstarts (const string target "Text being searched",
-                           const string prefix "Prefix to be searched")
-    /* Check whether 'target' starts with the prefix 'prefix'.
-    Return TRUE if 'target' starts with 'prefix', otherwise FALSE. */
+                           const string pattern "Prefix to be searched")
+    /* Check whether 'target' starts with the pattern 'pattern'.
+    Return TRUE if 'target' starts with 'pattern', otherwise FALSE. */
 
-    if nelem(target) < nelem(prefix)
-       printf "\nWarning: 'prefix' cannot be longer than 'target'.\n"
+    if nelem(target) < nelem(pattern)
+       printf "\nWarning: 'pattern' cannot be longer than 'target'.\n"
        return FALSE
     endif
 
-    string target_starts_with = substr(target, 1, nelem(prefix))
+    string target_starts_with = substr(target, 1, nelem(pattern))
 
-    if target_starts_with == prefix
+    if target_starts_with == pattern
         return TRUE
     else
         return FALSE
@@ -177,22 +177,22 @@ end function
 
 
 function scalar strends (const string target "Text being searched",
-                         const string suffix "Suffix to be searched")
-    /* Check whether 'target' ends with the suffix 'suffix'.
-    Return TRUE if 'target' ends with 'suffix', otherwise FALSE. */
+                         const string pattern "Suffix to be searched")
+    /* Check whether 'target' ends with the pattern 'pattern'.
+    Return TRUE if 'target' ends with 'pattern', otherwise FALSE. */
 
-    if nelem(target) < nelem(suffix)
-       printf "\nWarning: 'suffix' cannot be longer than 'target'.\n"
+    if nelem(target) < nelem(pattern)
+       printf "\nWarning: 'pattern' cannot be longer than 'target'.\n"
        return FALSE
     endif
 
     scalar n_chars_target = nelem(target)
-    scalar n_chars_suffix = nelem(suffix)
-    scalar start = 1 + n_chars_target - n_chars_suffix
+    scalar n_chars_pattern = nelem(pattern)
+    scalar start = 1 + n_chars_target - n_chars_pattern
     scalar ende = n_chars_target
     string target_ends_with = substr(target, start, ende)
 
-    if target_ends_with == suffix
+    if target_ends_with == pattern
         return TRUE
     else
         return FALSE
@@ -236,6 +236,25 @@ function string titlecase (const string input, const bool add_space[TRUE])
         ret += sprintf("%s", capitalize("$i"))
         if i < nelem(Inputs) && add_space == TRUE
             ret += " "
+        endif
+    endloop
+
+    return ret
+end function
+
+
+function string snakecase (const string input)
+    /* The snakecase is a style replacing spaces by underscores, and all letters
+    to lowercase.
+    return: string, Formatted in snakecase style */
+
+    strings Inputs = strsplit(input, " ")
+    string ret
+
+    loop foreach i Inputs
+        ret += sprintf("%s", tolower("$i"))
+        if i < nelem(Inputs)
+            ret += "_"
         endif
     endloop
 

@@ -413,6 +413,32 @@ test_find(Params)
 
 
 
+bundles Params = null
+Params = Params + _(input = "", expected = "")
+Params = Params + _(input = " ", expected = "")
+Params = Params + _(input = "gretl Loves SNAKE caSe",\
+                    expected = "gretl_loves_snake_case")
+Params = Params + _(input = " gretl Loves SNAKE caSe",\
+                    expected = "gretl_loves_snake_case")
+Params = Params + _(input = " gretl Loves SNAKE caSe ",\
+                    expected = "gretl_loves_snake_case")
+Params = Params + _(input = " gretl      Loves SNAKE caSe ",\
+                    expected = "gretl_loves_snake_case")
+function void test_snakecase (const bundles P)
+    print "Start testing snakecase()."
+
+    loop foreach i P
+        # Given + When
+        string actual = snakecase(P[i].input)
+        string expected = P[i].expected
+
+        # Then
+        assert(actual == expected)
+    endloop
+end function
+test_snakecase(Params)
+
+
 # TODO: Not yet implemented -- works only if "to_num = 1"
 /*
    nulldata 4

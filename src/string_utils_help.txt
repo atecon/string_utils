@@ -13,6 +13,7 @@ Public functions:
 -----------------
 
 camelcase(string input):
+========================
 Camel-case is a capitalization of the first letter (and the remaining letters
 are lowercase) before concatenating each of the space-separated words to a
 single word. Words of the 'input' variable are expected to be separated by space.
@@ -26,6 +27,7 @@ String in camel-case format.
 
 
 capitalize(string input):
+=========================
 Convert first letter of a string to uppercase and other letters to lowercase.
 Eventual spaces will not be removed before return.
 ----------
@@ -37,25 +39,27 @@ Returns capitalized string.
 
 
 find(const string search, const string find):
+=============================================
 Finds a substring in a string and returns the index of the substring. Eventual
 spaces are not ignored. If 'find' exists multiple times, the position of its first
 occurrence is returned.
 ----------
 Arguments:
-input   - string, String to be searched
-output  - string, String to find
+search   - string, String to be searched
+find     - string, String to find
 
 Return:
 Position of the 'find' string within the search string. In case, 'find' is not
 found in the 'search string, the scalar value 0 is returned.
 
 
-msortby_rowlabels():
+msortby_rowlabels(const matrix X, const strings rowlabels_new):
+===============================================================
 Sort rows of matrix X by re-ordering row-labels of X by string array
 'rowlabels_new'.
 ----------
 Arguments:
-X               - matrix, must include row-labels set by rnameset()
+X               - matrix, must include row-labels
 rowlabels_new   - string array, re-order X' row-labels by this string
 
 Return:
@@ -64,21 +68,37 @@ Also all elements in 'rowlabels_new' must be present in X' row-labels too,
 otherwise an empty matrix is returned (can be checked by <nelem(matrix)>).
 
 
-strdrop():
-Drop a specific string 'drop_str' from string array 'S'. String 'drop_str'
+snakecase(string input):
+========================
+The snakecase is a style replacing spaces by underscores, and transforming all
+letters to lowercase. Words of the 'input' variable are expected to be separated
+by space. Eventual spaces at the beginning or end of the string are removed
+before return.
+----------
+Arguments:
+input   - string, Input string
+
+Return:
+String in snake-case format.
+
+
+strdrop(strings S, string pattern):
+===================================
+Drop a specific string pattern from string array 'S'. String 'pattern'
 may occur multiple times.
 ----------
 Arguments:
 S           - string array, Input
-drop_str    - string, Pattern of string value to be dropped from S
+pattern     - string, Pattern of string value to be dropped from S
 
 Return:
-Return string array excluding string 'drop_str' if present in S. If 'drop_str'
+Return string array excluding string 'pattern' if present in S. If 'drop_str'
 is not present, the original array 'S' is returned instead. If string
 array 'S' has length zero, an empty array is returned.
 
 
-strflatten():
+strflatten(string S, const string delimiter[null]):
+===================================================
 Flatten an array of strings to a string separated by some delimiter.
 ----------
 Arguments:
@@ -92,57 +112,63 @@ function flatten which holds the strings in S, arranged one per line
 by default.
 
 
-strrepl():
+strrepl(const string S, const int n[1::]):
+==========================================
 Copy string n-times into a string array of length n.
 ----------
 Arguments:
-str         - string
-n           - int
+S           - string, String to be repeated 'n' times
+n           - int, Number of times to repeat 'S'
 
 Return:
-Array containing string 'str' n-times. Also works for an empty string 'str'.
+Array containing string 'S' n-times. Also works for an empty string 'S'.
 
 
-strsandwich():
-Construct a string array. To each numerical value of x concatenate a
-string prefix 'pre' and a suffix 'post'.
+strsandwich(matrix x, const string prefix[null], const string suffix[null]):
+=======================================================================
+Construct a string array. To each numerical value of "x", concatenate a
+string prefix and a suffix.
 ----------
 Arguments:
-x           - matrix
-pre         - string, optional
-post        - string, optional
+x           - matrix, holding numerical values
+pre         - string, prefix to add (optional, default = "")
+post        - string, suffix to add (optional, default = "")
 
 Return:
 Array of length n=rows(vec(x)). Each string is a combination of the
-prefix 'pre', the i-th numerical value of x and the suffix 'post'.
+prefix, the i-th numerical value of "x" and the suffix.
 
 
-strstarts():
-Check whether 'target' starts with 'prefix'.
+strstarts(const string target, const string pattern):
+====================================================
+Check whether 'target' starts with 'pattern'.
 ----------
 Arguments:
-target      - string
-prefix      - string
+target      - string, String being searched
+pattern     - string, Pattern to search for
 
 Return:
-TRUE if 'target' starts with 'prefix', otherwise FALSE.
+TRUE if 'target' starts with 'pattern', otherwise FALSE.
 
-strends():
-Check whether 'target' ends with 'suffix'.
+
+strends(const string target, const string pattern):
+==================================================
+Check whether 'target' ends with 'pattern'.
 ----------
 Arguments:
-target      - string
-suffix      - string
+target      - string, String being searched
+pattern     - string, Pattern to search for
 
 Return:
-TRUE if 'target' ends with 'suffix', otherwise FALSE.
+TRUE if 'target' ends with 'pattern', otherwise FALSE.
 
 
-struniq():
+struniq(const strings S):
+=========================
 Get the unique string values of string array S.
 ----------
 Arguments:
-S           - string array
+S           - string array, Array to process
 
 Return:
 Array containing the distinct elements of array S not sorted but in their
@@ -151,6 +177,7 @@ string element is of length zero, an empty string array is returned.
 
 
 titlecase(string input):
+========================
 The titlecase is a capitalization style used for titles so that the first letter
 of each word is uppercase and the remaining letters are lowercase. Words are
 expected to be separated by space. Space at the beginning or end of the string
@@ -165,7 +192,7 @@ Return:
 
 Changelog:
 - 0.5, April 2022:
-    + Add new functions capitalize(), camelcase(), titlecase() and find()
+    + Add new functions capitalize(), camelcase(), snakecase(), titlecase() and find()
 - 0.4, January 2021:
     + Add new functions strstarts() and strends()
     + Change minimum version required from 2019c to 2020b.

@@ -57,6 +57,11 @@ eval titlecase(input)
 string input = "abc def"
 eval camelcase(input)
 
+# Snakecase string
+string input = "gretl Loves SNAKE caSe"
+eval snakecase(input)
+
+
 # Find position of a substring within a string
 string search = "abc def"
 string find = "e"

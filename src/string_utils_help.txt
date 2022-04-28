@@ -38,8 +38,8 @@ Return:
 Returns capitalized string.
 
 
-find(const string search, const string find):
-=============================================
+strfind(const string search, const string find):
+================================================
 Finds a substring in a string and returns the index of the substring. Eventual
 spaces are not ignored. If 'find' exists multiple times, the position of its first
 occurrence is returned.
@@ -191,6 +191,9 @@ Return:
 
 
 Changelog:
+- 0.6, April 2022:
+    + Rename the find() function to strfind() due to conflicting function names
+    with the "matlab_utilities" package
 - 0.5, April 2022:
     + Add new functions capitalize(), camelcase(), snakecase(), titlecase() and
     find()

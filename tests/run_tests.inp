@@ -2,7 +2,7 @@ set verbose off
 clear
 set assert stop
 
-include "./src/string_utils.inp"
+include "./src/string_utils.inp" --force
 include assertion.gfn
 
 
@@ -397,19 +397,19 @@ Params = Params + _(input = "ABc", find = "", expected = 0)
 Params = Params + _(input = "ABc", find = " ", expected = 0)
 Params = Params + _(input = "ABc ", find = " ", expected = 4)
 Params = Params + _(input = " ABc ", find = " ", expected = 1)
-function void test_find (const bundles P)
-    print "Start testing find()."
+function void test_strfind (const bundles P)
+    print "Start testing strfind()."
 
     loop foreach i P
         # Given + When
-        scalar actual = find(P[i].input, P[i].find)
+        scalar actual = strfind(P[i].input, P[i].find)
         scalar expected = P[i].expected
 
         # Then
         assert(actual == expected)
     endloop
 end function
-test_find(Params)
+test_strfind(Params)
 
 
 

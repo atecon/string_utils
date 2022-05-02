@@ -262,7 +262,7 @@ function string snakecase (const string input)
 end function
 
 
-function scalar find (const string search, const string find)
+function scalar strfind (const string search, const string find)
     /* Finds a substring in a string and returns the index of the substring.
     return: scalar, Position of the string. If 'find' is not found, return 0 value.
     Eventual spaces are not ignored. */

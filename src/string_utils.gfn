@@ -2,8 +2,8 @@
 <gretl-functions>
 <gretl-function-package name="string_utils" no-data-ok="true" minver="2020b">
 <author email="atecon@posteo.de">Artur Tarassow</author>
-<version>0.5</version>
-<date>2022-04-27</date>
+<version>0.6</version>
+<date>2022-04-28</date>
 <description>Helper functions for string operations</description>
 <tags>C81</tags>
 <help>
@@ -47,8 +47,8 @@ Return:
 Returns capitalized string.
 
 
-find(const string search, const string find):
-=============================================
+strfind(const string search, const string find):
+================================================
 Finds a substring in a string and returns the index of the substring. Eventual
 spaces are not ignored. If 'find' exists multiple times, the position of its first
 occurrence is returned.
@@ -200,6 +200,9 @@ Return:
 
 
 Changelog:
+- 0.6, April 2022:
+    + Rename the find() function to strfind() due to conflicting function names
+    with the &quot;matlab_utilities&quot; package
 - 0.5, April 2022:
     + Add new functions capitalize(), camelcase(), snakecase(), titlecase() and
     find()
@@ -244,26 +247,6 @@ return input
 letter of each word is uppercase and the remaining letters are lowercase.
 return: string, titlecase */
 return titlecase(input, FALSE)
-</code>
-</gretl-function>
-<gretl-function name="find" type="scalar">
- <params count="2">
-  <param name="search" type="string" const="true"/>
-  <param name="find" type="string" const="true"/>
- </params>
-<code>/* Finds a substring in a string and returns the index of the substring.
-return: scalar, Position of the string. If 'find' is not found, return 0 value.
-Eventual spaces are not ignored. */
-if !nelem(search) || !nelem(find)
-  print &quot;Warning: Both the searched string and the find string must be at least of length one.&quot;
-  return 0
-endif
-string match = strstr(search, find)
-scalar ret = 0
-if match != &quot;&quot;
-  ret = 1 + strlen(search) - strlen(match)
-endif
-return ret
 </code>
 </gretl-function>
 <gretl-function name="msortby_rowlabels" type="matrix">
@@ -337,6 +320,26 @@ else
       ret += S[i]
     endif
   endloop
+endif
+return ret
+</code>
+</gretl-function>
+<gretl-function name="strfind" type="scalar">
+ <params count="2">
+  <param name="search" type="string" const="true"/>
+  <param name="find" type="string" const="true"/>
+ </params>
+<code>/* Finds a substring in a string and returns the index of the substring.
+return: scalar, Position of the string. If 'find' is not found, return 0 value.
+Eventual spaces are not ignored. */
+if !nelem(search) || !nelem(find)
+  print &quot;Warning: Both the searched string and the find string must be at least of length one.&quot;
+  return 0
+endif
+string match = strstr(search, find)
+scalar ret = 0
+if match != &quot;&quot;
+  ret = 1 + strlen(search) - strlen(match)
 endif
 return ret
 </code>
@@ -577,7 +580,7 @@ eval snakecase(input)
 # Find position of a substring within a string
 string search = &quot;abc def&quot;
 string find = &quot;e&quot;
-eval find(search, find)
+eval strfind(search, find)
 </sample-script>
 </gretl-function-package>
 </gretl-functions>

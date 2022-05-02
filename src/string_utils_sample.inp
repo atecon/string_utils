@@ -65,4 +65,4 @@ eval snakecase(input)
 # Find position of a substring within a string
 string search = "abc def"
 string find = "e"
-eval find(search, find)
+eval strfind(search, find)

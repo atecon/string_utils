@@ -48,23 +48,23 @@ function matrix strpos (const strings S "Array of strings",
 end function
 
 
-function strings struniq (const strings S)
+function strings struniq (const strings svalues)
 /* Returns an array containing the distinct elements
     of S not sorted but in their order of appearance. */
 
     strings suniq = array(0)
     scalar error = 0
 
-    if nelem(S) && strlen(S[1])
-        strings suniq = defarray(S[1])
+    if nelem(svalues) && strlen(svalues[1])
+        strings suniq = defarray(svalues[1])
 
-        loop i=2..nelem(S) -q
-            if strlen(S[i]) == 0
+        loop i=2..nelem(svalues) -q
+            if strlen(svalues[i]) == 0
                 error++
                 break
             endif
-            if nelem( strpos(suniq, S[i], 0) ) == 0
-                suniq += S[i]
+            if nelem( strpos(suniq, svalues[i], 0) ) == 0
+                suniq += svalues[i]
             endif
         endloop
 

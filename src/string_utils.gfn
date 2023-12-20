@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <gretl-functions>
-<gretl-function-package name="string_utils" no-data-ok="true" minver="2020b">
+<gretl-function-package name="string_utils" no-data-ok="true" minver="2023c">
 <author email="atecon@posteo.de">Artur Tarassow</author>
-<version>0.6</version>
-<date>2022-04-28</date>
+<version>0.7</version>
+<date>2023-12-29</date>
 <description>Helper functions for string operations</description>
 <tags>C81</tags>
 <help>
@@ -25,8 +25,9 @@ camelcase(string input):
 ========================
 Camel-case is a capitalization of the first letter (and the remaining letters
 are lowercase) before concatenating each of the space-separated words to a
-single word. Words of the 'input' variable are expected to be separated by space.
-Eventual spaces at the beginning or end of the string are removed before return.
+single word. Words of the 'input' variable are expected to be separated by
+space. Eventual spaces at the beginning or end of the string are removed before
+return.
 ----------
 Arguments:
 input   - string, Input string
@@ -50,8 +51,8 @@ Returns capitalized string.
 strfind(const string search, const string find):
 ================================================
 Finds a substring in a string and returns the index of the substring. Eventual
-spaces are not ignored. If 'find' exists multiple times, the position of its first
-occurrence is returned.
+spaces are not ignored. If 'find' exists multiple times, the position of its
+first occurrence is returned.
 ----------
 Arguments:
 search   - string, String to be searched
@@ -172,17 +173,25 @@ Return:
 TRUE if 'target' ends with 'pattern', otherwise FALSE.
 
 
-struniq(const strings S):
-=========================
-Get the unique string values of string array S.
+struniq(const strings S, const bool do_sort[FALSE]):
+====================================================
+The function takes an array of strings (input) and a boolean flag (do_sort) as
+input. It returns an array of unique strings from the input array. If do_sort
+is TRUE, the input array is sorted before extracting unique values. If do_sort
+is FALSE, the function uses a more complex method to extract unique values
+without changing the original order of the input array.
+NOTE: The function performs faster of do_sort is TRUE. However, to ensure
+backward-compatibility, do_sort is set to FALSE per default.
+
 ----------
 Arguments:
-S           - string array, Array to process
+S           - strings, Array of input strings
+do_sort     - bool, Sort the unique values in alphabetic order if TRUE,
+              otherwise return the unique values in order of appearence.
 
 Return:
-Array containing the distinct elements of array S not sorted but in their
-order of appearance. If string array 'S' has length zero or at least one
-string element is of length zero, an empty string array is returned.
+Array containing the distinct elements of array S either sorted or not. Empty
+items of the array are placed first.
 
 
 titlecase(string input):
@@ -200,6 +209,10 @@ Return:
 
 
 Changelog:
+- 0.7, December 2023
+    + The struniq() function now supports ordering of the unique values.
+    + Improved speed of the struniq() function.
+    + New minimal version requirement is 2023c due to the used asort() function
 - 0.6, April 2022:
     + Rename the find() function to strfind() due to conflicting function names
     with the &quot;matlab_utilities&quot; package
@@ -231,11 +244,14 @@ Changelog:
  </params>
 <code>/* Convert first letter to uppercase and other letters to lowercase.
 return: string, Capitalized */
+
 input = tolower(input)
+
 if nelem(input) == 0
   return input
 endif
 input = nelem(input) == 1 ? toupper(input[1]) : toupper(input[1]) ~ input[2:]
+
 return input
 </code>
 </gretl-function>
@@ -246,6 +262,7 @@ return input
 <code>/* The titlecase is a capitalization style used for titles so that the first
 letter of each word is uppercase and the remaining letters are lowercase.
 return: string, titlecase */
+
 return titlecase(input, FALSE)
 </code>
 </gretl-function>
@@ -258,11 +275,14 @@ return titlecase(input, FALSE)
  </params>
 <code>/* Read out current string array of row-labels of matrix X. Re-order
 rows of X according to string array 'rowlabels_new'.
+
 The array 'rowlabels_new' must be of the same length as X has rows.
 All elements in 'rowlabels_new' must also be included in X' row
 names, otherwise a 1x1 zero-matrix is returned. */
+
 matrix ret = {}
 strings rnames = rnameget(X)
+
 if !nelem(rowlabels_new) || !nelem(rnames)
   return ret
 endif
@@ -272,6 +292,7 @@ endif
 if nelem(rowlabels_new) != rows(X)
   return ret
 endif
+
 matrix ret = zeros(rows(X), cols(X))
 loop i=1..nelem(rowlabels_new) -q
   if nelem(strpos(rnames, rowlabels_new[i], 0)) &gt; 0
@@ -282,6 +303,7 @@ loop i=1..nelem(rowlabels_new) -q
   endif
 endloop
 rnameset(ret, rowlabels_new)
+
 return ret
 </code>
 </gretl-function>
@@ -292,14 +314,17 @@ return ret
 <code>/* The snakecase is a style replacing spaces by underscores, and all letters
 to lowercase.
 return: string, Formatted in snakecase style */
+
 strings Inputs = strsplit(input, &quot; &quot;)
 string ret
+
 loop foreach i Inputs
   ret += sprintf(&quot;%s&quot;, tolower(&quot;$i&quot;))
   if i &lt; nelem(Inputs)
     ret += &quot;_&quot;
   endif
 endloop
+
 return ret
 </code>
 </gretl-function>
@@ -309,7 +334,9 @@ return ret
   <param name="pattern" type="string" const="true"/>
  </params>
 <code>/* Drop a specific string from string array. String may occur multiple times. */
+
 strings ret = array(0)
+
 if strlen(pattern) == 0
   return S
 elif nelem(S) == 0
@@ -321,6 +348,7 @@ else
     endif
   endloop
 endif
+
 return ret
 </code>
 </gretl-function>
@@ -332,15 +360,19 @@ return ret
 <code>/* Finds a substring in a string and returns the index of the substring.
 return: scalar, Position of the string. If 'find' is not found, return 0 value.
 Eventual spaces are not ignored. */
+
 if !nelem(search) || !nelem(find)
   print &quot;Warning: Both the searched string and the find string must be at least of length one.&quot;
   return 0
 endif
+
 string match = strstr(search, find)
 scalar ret = 0
+
 if match != &quot;&quot;
   ret = 1 + strlen(search) - strlen(match)
 endif
+
 return ret
 </code>
 </gretl-function>
@@ -350,9 +382,11 @@ return ret
   <param name="delimiter" type="string" optional="true" const="true"/>
  </params>
 <code>/* Flatten string array to string. */
+
 if exists(delimiter) == 0
   delimiter = &quot;,&quot;
 endif
+
 return regsub(flatten(S), &quot;\n&quot;, delimiter)
 </code>
 </gretl-function>
@@ -362,10 +396,12 @@ return regsub(flatten(S), &quot;\n&quot;, delimiter)
   <param name="n" type="int" min="1" const="true"/>
  </params>
 <code>/* Construct string array holding a constant string n times. */
+
 strings S = array(n)
 loop i=1..n -q
   S[i] = str
 endloop
+
 return S
 </code>
 </gretl-function>
@@ -378,9 +414,11 @@ return S
 <code>/* Construct a string array where to each numerical value of x
 a string prefix 'pre' and a suffix 'post' is concatenated.
 Proposed by Riccardo &quot;Jack&quot; Lucchetti. */
+
 matrix x = vec(x)
 scalar n = rows(x)
 strings ret = array(n)
+
 if !nelem(x)
   return ret
 endif
@@ -390,9 +428,11 @@ endif
 if !exists(post)
   post = &quot;&quot;
 endif
+
 loop i=1..n -q
   ret[i] = sprintf(&quot;%s%d%s&quot;, pre, x[i], post)
 endloop
+
 return ret
 </code>
 </gretl-function>
@@ -407,12 +447,15 @@ return ret
   <param name="print_warning" type="bool" default="1" const="true"/>
  </params>
 <code>/* Returns the positional entries of string in S in a column vector */
+
 matrix ret = {}
+
 loop i=1..nelem(S) -q
   if S[i] == search_pattern
     ret |= $i
   endif
 endloop
+
 return ret
 </code>
 </gretl-function>
@@ -427,11 +470,14 @@ return ret
  </params>
 <code>/* Check whether 'target' starts with the pattern 'pattern'.
 Return TRUE if 'target' starts with 'pattern', otherwise FALSE. */
+
 if nelem(target) &lt; nelem(pattern)
   printf &quot;\nWarning: 'pattern' cannot be longer than 'target'.\n&quot;
   return FALSE
 endif
+
 string target_starts_with = substr(target, 1, nelem(pattern))
+
 if target_starts_with == pattern
   return TRUE
 else
@@ -450,15 +496,18 @@ endif
  </params>
 <code>/* Check whether 'target' ends with the pattern 'pattern'.
 Return TRUE if 'target' ends with 'pattern', otherwise FALSE. */
+
 if nelem(target) &lt; nelem(pattern)
   printf &quot;\nWarning: 'pattern' cannot be longer than 'target'.\n&quot;
   return FALSE
 endif
+
 scalar n_chars_target = nelem(target)
 scalar n_chars_pattern = nelem(pattern)
 scalar start = 1 + n_chars_target - n_chars_pattern
 scalar ende = n_chars_target
 string target_ends_with = substr(target, start, ende)
+
 if target_ends_with == pattern
   return TRUE
 else
@@ -467,30 +516,56 @@ endif
 </code>
 </gretl-function>
 <gretl-function name="struniq" type="strings">
- <params count="1">
-  <param name="S" type="strings" const="true"/>
+ <params count="2">
+  <param name="input" type="strings"/>
+  <param name="do_sort" type="bool" default="0" const="true"/>
  </params>
-<code>/* Returns an array containing the distinct elements
-of S not sorted but in their order of appearance. */
-strings suniq = array(0)
-scalar error = 0
-if nelem(S) &amp;&amp; strlen(S[1])
-  strings suniq = defarray(S[1])
-  loop i=2..nelem(S) -q
-    if strlen(S[i]) == 0
-      error++
-      break
-    endif
-    if nelem( strpos(suniq, S[i], 0) ) == 0
-      suniq += S[i]
+<code>/* This function was thankfully written by Jack Lucchetti.
+The function takes an array of strings (input) and a boolean
+flag (do_sort) as input. It returns an array of unique strings from the
+input array. If do_sort is TRUE, the input array is sorted before
+extracting unique values. If do_sort is FALSE, the function uses a more
+complex method to extract unique values without changing the original order
+of the input array. */
+
+if nelem(input) == 1
+  return input
+endif
+
+scalar n_input = nelem(input)
+strings ret = empty
+
+if do_sort
+  input_sorted = sort(input)
+  ret += input_sorted[1]
+  loop i = 2..n_input
+    if input_sorted[i] != input_sorted[i-1]
+      ret += input_sorted[i]
     endif
   endloop
-  if error
-    #printf &quot;\nWarning: At least one element in string array has length zero. Not allowed.\n&quot;
-    return array(0)
-  endif
+else
+  bundles B = array(n_input)
+  loop i = 1..n_input
+    B[i].prog = i
+    B[i].s = input[i]
+  endloop
+  asort(B, bsorts) # call function bsorts()
+
+  B[1].rep = 0
+  matrix ids = B[1].prog
+  loop i = 2..n_input
+    B[i].rep = B[i].s == B[i-1].s
+  endloop
+  asort(B, bsortid)  # call function bsortid()
+
+  loop i = 1..n_input
+    if !(B[i].rep)
+      ret += B[i].s
+    endif
+  endloop
 endif
-return suniq
+
+return ret
 </code>
 </gretl-function>
 <gretl-function name="titlecase" type="string">
@@ -501,15 +576,36 @@ return suniq
 <code>/* The titlecase is a capitalization style used for titles so that the first
 letter of each word is uppercase and the remaining letters are lowercase.
 return: string, titlecase */
+
 strings Inputs = strsplit(input, &quot; &quot;)
 string ret
+
 loop foreach i Inputs
   ret += sprintf(&quot;%s&quot;, capitalize(&quot;$i&quot;))
   if i &lt; nelem(Inputs) &amp;&amp; add_space == TRUE
     ret += &quot; &quot;
   endif
 endloop
+
 return ret
+</code>
+</gretl-function>
+<gretl-function name="bsortid" type="scalar" private="1">
+ <params count="2">
+  <param name="b1" type="bundle" const="true"/>
+  <param name="b2" type="bundle" const="true"/>
+ </params>
+<code>/* Helper for struniq() */
+return b1.prog - b2.prog
+</code>
+</gretl-function>
+<gretl-function name="bsorts" type="scalar" private="1">
+ <params count="2">
+  <param name="b1" type="bundle" const="true"/>
+  <param name="b2" type="bundle" const="true"/>
+ </params>
+<code>/* Helper for struniq() */
+return strncmp(b1.s, b2.s)
 </code>
 </gretl-function>
 <sample-script>
@@ -527,8 +623,13 @@ strings S = defarray(&quot;A&quot;, &quot;B&quot;, &quot;C&quot;, &quot;B&quot;)
 string search = &quot;B&quot;
 eval strpos(S, search)
 
-strings S = defarray(&quot;A&quot;, &quot;B&quot;, &quot;C&quot;, &quot;B&quot;)
+# Unique values without sorting
+strings S = defarray(&quot;C&quot;, &quot;B&quot;, &quot;A&quot;, &quot;B&quot;)
 eval struniq(S)
+# Unique values with sorting
+strings S = defarray(&quot;C&quot;, &quot;B&quot;, &quot;A&quot;, &quot;B&quot;)
+eval struniq(S, TRUE)
+
 
 string str = &quot;AB&quot;
 eval strrepl(str, 3)

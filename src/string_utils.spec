@@ -1,10 +1,10 @@
 author = Artur Tarassow
 email = atecon@posteo.de
-version = 0.6
-date = 2022-04-28
+version = 0.7
+date = 2023-12-29
 description = Helper functions for string operations
 tags = C81
-min-version = 2020b
+min-version = 2023c
 data-requirement = no-data-ok
 public = capitalize camelcase msortby_rowlabels snakecase strdrop strfind strflatten strrepl strsandwich strpos strstarts strends struniq titlecase
 help = string_utils_help.txt

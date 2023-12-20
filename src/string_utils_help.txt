@@ -16,8 +16,9 @@ camelcase(string input):
 ========================
 Camel-case is a capitalization of the first letter (and the remaining letters
 are lowercase) before concatenating each of the space-separated words to a
-single word. Words of the 'input' variable are expected to be separated by space.
-Eventual spaces at the beginning or end of the string are removed before return.
+single word. Words of the 'input' variable are expected to be separated by
+space. Eventual spaces at the beginning or end of the string are removed before
+return.
 ----------
 Arguments:
 input   - string, Input string
@@ -41,8 +42,8 @@ Returns capitalized string.
 strfind(const string search, const string find):
 ================================================
 Finds a substring in a string and returns the index of the substring. Eventual
-spaces are not ignored. If 'find' exists multiple times, the position of its first
-occurrence is returned.
+spaces are not ignored. If 'find' exists multiple times, the position of its
+first occurrence is returned.
 ----------
 Arguments:
 search   - string, String to be searched
@@ -163,17 +164,25 @@ Return:
 TRUE if 'target' ends with 'pattern', otherwise FALSE.
 
 
-struniq(const strings S):
-=========================
-Get the unique string values of string array S.
+struniq(const strings S, const bool do_sort[FALSE]):
+====================================================
+The function takes an array of strings (input) and a boolean flag (do_sort) as
+input. It returns an array of unique strings from the input array. If do_sort
+is TRUE, the input array is sorted before extracting unique values. If do_sort
+is FALSE, the function uses a more complex method to extract unique values
+without changing the original order of the input array.
+NOTE: The function performs faster of do_sort is TRUE. However, to ensure
+backward-compatibility, do_sort is set to FALSE per default.
+
 ----------
 Arguments:
-S           - string array, Array to process
+S           - strings, Array of input strings
+do_sort     - bool, Sort the unique values in alphabetic order if TRUE,
+              otherwise return the unique values in order of appearence.
 
 Return:
-Array containing the distinct elements of array S not sorted but in their
-order of appearance. If string array 'S' has length zero or at least one
-string element is of length zero, an empty string array is returned.
+Array containing the distinct elements of array S either sorted or not. Empty
+items of the array are placed first.
 
 
 titlecase(string input):
@@ -191,6 +200,10 @@ Return:
 
 
 Changelog:
+- 0.7, December 2023
+    + The struniq() function now supports ordering of the unique values.
+    + Improved speed of the struniq() function.
+    + New minimal version requirement is 2023c due to the used asort() function
 - 0.6, April 2022:
     + Rename the find() function to strfind() due to conflicting function names
     with the "matlab_utilities" package

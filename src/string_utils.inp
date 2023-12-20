@@ -87,7 +87,7 @@ function strings struniq (strings input, const bool do_sort[FALSE])
         loop i = 2..n_input
             if B[i].s != B[i-1].s
                 counter++
-                mask[counter] = b[i].prog
+                mask[counter] = B[i].prog
             endif
         endloop
         mask = msortby(mask[1:counter], 1)

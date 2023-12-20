@@ -98,21 +98,6 @@ is not present, the original array 'S' is returned instead. If string
 array 'S' has length zero, an empty array is returned.
 
 
-strflatten(string S, const string delimiter[null]):
-===================================================
-Flatten an array of strings to a string separated by some delimiter.
-----------
-Arguments:
-S           - string array, Input string array
-delimiter   - string, Delimiter (optional, default: ",")
-
-Return:
-String value separating each array item by some delimiter.
-NOTE: For simply flattening a string array, use the built-in gretl
-function flatten which holds the strings in S, arranged one per line
-by default.
-
-
 strrepl(const string S, const int n[1::]):
 ==========================================
 Copy string n-times into a string array of length n.
@@ -202,6 +187,8 @@ Return:
 Changelog:
 - 0.7, December 2023
     + The struniq() function now supports ordering of the unique values.
+    + Remove the strflatten() function. Use the built-in flatten() function
+      instead which accepts an arbitrary delimiter string since version 2022c.
     + Improved speed of the struniq() function.
     + New minimal version requirement is 2023c due to the used asort() function
 - 0.6, April 2022:

@@ -1,14 +1,3 @@
-function string strflatten  (const strings S,
-                             const string delimiter[null])
-    /* Flatten string array to string. */
-
-    if exists(delimiter) == 0
-        delimiter = ","
-    endif
-
-    return regsub(flatten(S), "\n", delimiter)
-end function
-
 
 function strings strdrop (const strings S, const string pattern)
     /* Drop a specific string from string array. String may occur multiple times. */

@@ -284,45 +284,6 @@ test_strrepl()
 test_msortby_rowlabels()
 
 
-function void test_strflatten_default (void)
-    print "Start testing strflatten() without explicit delimiter."
-
-    # Given
-    strings S1 = defarray("A", "B")
-    strings S2 = defarray("A", "B", "")
-
-    # When
-    string actual1 = strflatten(S1)
-    string actual2 = strflatten(S2)
-    string expected1 = "A,B"
-    string expected2 = "A,B,"
-
-    # Then
-    assert(actual1 == expected1)
-    assert(actual2 == expected2)
-end function
-test_strflatten_default()
-
-
-function void test_strflatten_w_delimiter (void)
-    print "Start testing strflatten() with own delimiter."
-
-    # Given
-    strings S1 = defarray("A", "B")
-    strings S2 = defarray("A", "B", "")
-
-    # When
-    string actual1 = strflatten(S1, ";")
-    string actual2 = strflatten(S2, ";")
-    string expected1 = "A;B"
-    string expected2 = "A;B;"
-
-    # Then
-    assert(actual1 == expected1)
-    assert(actual2 == expected2)
-end function
-test_strflatten_w_delimiter()
-
 
 bundles Params = null
 Params = Params + _(target = "ABCdev", prefix = "ABC", expected = TRUE)

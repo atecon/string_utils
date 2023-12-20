@@ -37,12 +37,7 @@ function matrix strpos (const strings S "Array of strings",
 end function
 
 
-function scalar bsortid(const bundle b1, const bundle b2)
-    /* Helper for struniq() */
-    return b1.prog - b2.prog
-end function
-
-function scalar bsorts(const bundle b1, const bundle b2)
+function scalar bsorts (const bundle b1, const bundle b2)
     /* Helper for struniq() */
     return strncmp(b1.s, b2.s)
 end function

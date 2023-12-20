@@ -12,8 +12,13 @@ strings S = defarray("A", "B", "C", "B")
 string search = "B"
 eval strpos(S, search)
 
-strings S = defarray("A", "B", "C", "B")
+# Unique values without sorting
+strings S = defarray("C", "B", "A", "B")
 eval struniq(S)
+# Unique values with sorting
+strings S = defarray("C", "B", "A", "B")
+eval struniq(S, TRUE)
+
 
 string str = "AB"
 eval strrepl(str, 3)

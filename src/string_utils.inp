@@ -48,36 +48,6 @@ function matrix strpos (const strings S "Array of strings",
 end function
 
 
-function strings struniq (const strings svalues)
-/* Returns an array containing the distinct elements
-    of S not sorted but in their order of appearance. */
-
-    strings suniq = array(0)
-    scalar error = 0
-
-    if nelem(svalues) && strlen(svalues[1])
-        strings suniq = defarray(svalues[1])
-
-        loop i=2..nelem(svalues) -q
-            if strlen(svalues[i]) == 0
-                error++
-                break
-            endif
-            if nelem( strpos(suniq, svalues[i], 0) ) == 0
-                suniq += svalues[i]
-            endif
-        endloop
-
-        if error
-            #printf "\nWarning: At least one element in string array has length zero. Not allowed.\n"
-            return array(0)
-        endif
-    endif
-
-    return suniq
-end function
-
-
 function scalar bsortid(const bundle b1, const bundle b2)
     /* Helper for struniq() */
     return b1.prog - b2.prog
@@ -88,42 +58,56 @@ function scalar bsorts(const bundle b1, const bundle b2)
     return strncmp(b1.s, b2.s)
 end function
 
-function strings struniq_new (strings s, bool do_sort[0])
-    scalar n = nelem(s)
+
+function strings struniq (strings input, const bool do_sort[FALSE])
+    /* This function was thankfully written by Jack Lucchetti.
+    The function takes an array of strings (input) and a boolean
+    flag (do_sort) as input. It returns an array of unique strings from the
+    input array. If do_sort is TRUE, the input array is sorted before
+    extracting unique values. If do_sort is FALSE, the function uses a more
+    complex method to extract unique values without changing the original order
+    of the input array. */
+
+    if nelem(input) == 1
+        return input
+    endif
+
+    scalar n_input = nelem(input)
     strings ret = empty
 
     if do_sort
-        ss = sort(s)
-        ret += ss[1]
-        loop i = 2 .. n
-            if ss[i] != ss[i-1]
-                ret += ss[i]
+        input_sorted = sort(input)
+        ret += input_sorted[1]
+        loop i = 2..n_input
+            if input_sorted[i] != input_sorted[i-1]
+                ret += input_sorted[i]
             endif
         endloop
     else
-        bundles b = array(n)
-        loop i = 1 .. n
-            b[i].prog = i
-            b[i].s = s[i]
+        bundles B = array(n_input)
+        loop i = 1..n_input
+            B[i].prog = i
+            B[i].s = input[i]
         endloop
-        asort(b, bsorts)
-        strings ss = array(n)
-        b[1].rep = 0
-        matrix ids = b[1].prog
-        loop i = 2 .. n
-            b[i].rep = b[i].s == b[i-1].s
-        endloop
-        asort(b, bsortid)
+        asort(B, bsorts) # call function bsorts()
 
-        loop i = 1 .. n
-            if !(b[i].rep)
-                ret += b[i].s
+        B[1].rep = 0
+        matrix ids = B[1].prog
+        loop i = 2..n_input
+            B[i].rep = B[i].s == B[i-1].s
+        endloop
+        asort(B, bsortid)  # call function bsortid()
+
+        loop i = 1..n_input
+            if !(B[i].rep)
+                ret += B[i].s
             endif
         endloop
     endif
 
     return ret
 end function
+
 
 
 function strings strrepl (const string str, const int n[1::])

@@ -156,7 +156,7 @@ Check whether `target` ends with `pattern`.
 
 `struniq(const strings input, const bool do_sort[FALSE])`
 
-The function takes an array of strings (`input`) and a boolean flag (`do_sort`) as input. It returns an array of unique strings from the input array. If `do_sort` is `TRUE`, the input array is sorted before extracting unique values. If `do_sort` is `FALSE`, the function uses a more complex method to extract unique values without changing the original order of the input array.
+The function takes an array of strings (`input`) and a boolean flag (`do_sort`) as input. It returns an array of unique strings from the input array. If `do_sort` is `TRUE`, the input array is sorted before extracting unique values. If `do_sort` is `FALSE`, the function uses a more complex method to extract unique values without changing the original order of the input array. **NOTE:** If speed is relevant for your task, you should set `do_sort = TRUE` which is much faster.
 
 **Arguments:**
 

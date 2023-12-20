@@ -1,20 +1,9 @@
 
-function strings strdrop (const strings S, const string pattern)
+function strings strdrop (const strings input, const string pattern)
     /* Drop a specific string from string array. String may occur multiple times. */
 
-    strings ret = array(0)
-
-    if strlen(pattern) == 0
-        return S
-    elif nelem(S) == 0
-        return ret
-    else
-        loop i=1..nelem(S) -q
-            if S[i] != pattern
-                ret += S[i]
-            endif
-        endloop
-    endif
+    matrix sel = instrings(input, pattern)
+    strings ret = rows(sel) ? input[-sel] : input
 
     return ret
 end function

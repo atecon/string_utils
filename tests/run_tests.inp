@@ -20,18 +20,18 @@ function void test_strsandwich (void)
     matrix x = seq(1,3)
     strings S = strsandwich(x)
     assert_equal_num(nelem(S), 3)
-    assert_equal_str(S[1], "1")
-    assert_equal_str(S[2], "2")
-    assert_equal_str(S[3], "3")
+    assert(S[1] == "1")
+    assert(S[2] == "2")
+    assert(S[3] == "3")
 
     string pre = ""
     string post = ""
     matrix x = seq(1,3)
     strings S = strsandwich(x, pre, post)
     assert_equal_num(nelem(S), 3)
-    assert_equal_str(S[1], "1")
-    assert_equal_str(S[2], "2")
-    assert_equal_str(S[3], "3")
+    assert(S[1] == "1")
+    assert(S[2] == "2")
+    assert(S[3] == "3")
 
     string pre = ""
     string post = ""
@@ -39,9 +39,9 @@ function void test_strsandwich (void)
     x[1] = NA
     strings S = strsandwich(x)
     assert_equal_num(nelem(S), 3)
-    assert_equal_str(S[1], "NA")
-    assert_equal_str(S[2], "2")
-    assert_equal_str(S[3], "3")
+    assert(S[1] == "NA")
+    assert(S[2] == "2")
+    assert(S[3] == "3")
 
     string pre = "mat["
     string post = ""
@@ -49,9 +49,9 @@ function void test_strsandwich (void)
     x[1] = NA
     strings S = strsandwich(x, pre)
     assert_equal_num(nelem(S), 3)
-    assert_equal_str(S[1], "mat[NA")
-    assert_equal_str(S[2], "mat[2")
-    assert_equal_str(S[3], "mat[3")
+    assert(S[1] == "mat[NA")
+    assert(S[2] == "mat[2")
+    assert(S[3] == "mat[3")
 
     string pre = "mat["
     string post = "&"
@@ -59,9 +59,9 @@ function void test_strsandwich (void)
     x[1] = NA
     strings S = strsandwich(x, pre, post)
     assert_equal_num(nelem(S), 3)
-    assert_equal_str(S[1], "mat[NA&")
-    assert_equal_str(S[2], "mat[2&")
-    assert_equal_str(S[3], "mat[3&")
+    assert(S[1] == "mat[NA&")
+    assert(S[2] == "mat[2&")
+    assert(S[3] == "mat[3&")
 
     string pre = ""
     string post = "987"
@@ -69,9 +69,9 @@ function void test_strsandwich (void)
     x[1] = NA
     strings S = strsandwich(x, , post)
     assert_equal_num(nelem(S), 3)
-    assert_equal_str(S[1], "NA987")
-    assert_equal_str(S[2], "2987")
-    assert_equal_str(S[3], "3987")
+    assert(S[1] == "NA987")
+    assert(S[2] == "2987")
+    assert(S[3] == "3987")
 end function
 
 
@@ -81,27 +81,27 @@ function void test_strdrop (void)
     strings S = defarray("ABU Kko*&(", "C?`=/$%&")
     string sdrop = "C?`=/$%&"
     strings S = strdrop(S, sdrop)
-    assert_equal_num(nelem(S), 1)
-    assert_equal_str(S[1], "ABU Kko*&(")
+    assert(nelem(S) == 1)
+    assert(S[1] == "ABU Kko*&(")
 
     strings S = defarray("ABU Kko*&(", "C?`=/$%&")
     string sdrop = "ABU Kko*&("
     strings S = strdrop(S, sdrop)
-    assert_equal_num(nelem(S), 1)
-    assert_equal_str(S[1], "C?`=/$%&")
+    assert(nelem(S) == 1)
+    assert(S[1] == "C?`=/$%&")
 
     strings S = defarray("A", "AB", "AB")
     string sdrop = "A"
     strings S = strdrop(S, sdrop)
-    assert_equal_num(nelem(S), 2)
-    assert_equal_str(S[1], "AB")
-    assert_equal_str(S[2], "AB")
+    assert(nelem(S) == 2)
+    assert(S[1] == "AB")
+    assert(S[2] == "AB")
 
     strings S = defarray("A", "AB", "AB")
     string sdrop = "AB"
     strings S = strdrop(S, sdrop)
-    assert_equal_num(nelem(S), 1)
-    assert_equal_str(S[1], "A")
+    assert(nelem(S) == 1)
+    assert(S[1] == "A")
 
     strings S = defarray("A", "B", "C")
     string sdrop = "D"

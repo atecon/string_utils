@@ -187,7 +187,7 @@ The titlecase is a capitalization style used for titles so that the first letter
 
 - The `struniq()` function now supports ordering of the unique values.
 - Remove the `strflatten()` function. Use the built-in `flatten()` function instead which accepts an arbitrary delimiter string since version 2022c.
-- Improved speed of the `struniq()` function.
+- Improved speed for both the `struniq()` and `strdrop()` function, respectively.
 - New minimal version requirement is 2023c.
 
 *0.6, November 2023*

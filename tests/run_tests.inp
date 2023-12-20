@@ -205,7 +205,6 @@ function void test_struniq_wordering (const bundles P)
 
         # Then
         assert(nelem(actual) == nelem(expected))
-        print "actual : expected"
         loop foreach j expected
             assert(actual[j] == "$j")
         endloop

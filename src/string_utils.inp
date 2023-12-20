@@ -78,6 +78,54 @@ function strings struniq (const strings svalues)
 end function
 
 
+function scalar bsortid(const bundle b1, const bundle b2)
+    /* Helper for struniq() */
+    return b1.prog - b2.prog
+end function
+
+function scalar bsorts(const bundle b1, const bundle b2)
+    /* Helper for struniq() */
+    return strncmp(b1.s, b2.s)
+end function
+
+function strings struniq_new (strings s, bool do_sort[0])
+    scalar n = nelem(s)
+    strings ret = empty
+
+    if do_sort
+        ss = sort(s)
+        ret += ss[1]
+        loop i = 2 .. n
+            if ss[i] != ss[i-1]
+                ret += ss[i]
+            endif
+        endloop
+    else
+        bundles b = array(n)
+        loop i = 1 .. n
+            b[i].prog = i
+            b[i].s = s[i]
+        endloop
+        asort(b, bsorts)
+        strings ss = array(n)
+        b[1].rep = 0
+        matrix ids = b[1].prog
+        loop i = 2 .. n
+            b[i].rep = b[i].s == b[i-1].s
+        endloop
+        asort(b, bsortid)
+
+        loop i = 1 .. n
+            if !(b[i].rep)
+                ret += b[i].s
+            endif
+        endloop
+    endif
+
+    return ret
+end function
+
+
 function strings strrepl (const string str, const int n[1::])
     /* Construct string array holding a constant string n times. */
 

@@ -133,34 +133,84 @@ end function
 
 
 
-function void test_struniq (void)
-    print "Start with struniq()"
+bundles Params = null
+Params = Params + _(input = defarray(""),
+                    do_sort = FALSE,
+                    expected = defarray(""))
+Params = Params + _(input = defarray("NZ", "AUS", "SAF", "AUS", "ENG", "SAF",
+                                     "NZ", "NZ", "SAF", "SAF"),
+                    do_sort = FALSE,
+                    expected = defarray("NZ", "AUS", "SAF", "ENG"))
+Params = Params + _(input = defarray("R1", "R2", "R3"),
+                    do_sort = FALSE,
+                    expected = defarray("R1", "R2", "R3"))
+Params = Params + _(input = defarray("R1", "R2", "R3", "R-1", "R2", "A", "A",
+                                     "C"),
+                    do_sort = FALSE,
+                    expected = defarray("R1", "R2", "R3", "R-1", "A", "C"))
+Params = Params + _(input = defarray("R2", "R1", ""),
+                    do_sort = FALSE,
+                    expected = defarray("R2", "R1", ""))
 
-    strings S = defarray("R1", "R2", "R3")
-    strings Suniq = struniq(S)
-    assert_equal_num(nelem(Suniq), 3)
-    assert_equal_str(Suniq[1], "R1")
-    assert_equal_str(Suniq[2], "R2")
-    assert_equal_str(Suniq[3], "R3")
+function void test_struniq_noordering (const bundles P)
+    print "Start testing function struniq_new() without ordering."
 
-    strings S = defarray("R1", "R2", "R3", "R-1", "R2", "A", "A", "C")
-    strings Suniq = struniq(S)
-    assert_equal_num(nelem(Suniq), 6)
-    assert_equal_str(Suniq[1], "R1")
-    assert_equal_str(Suniq[2], "R2")
-    assert_equal_str(Suniq[3], "R3")
-    assert_equal_str(Suniq[4], "R-1")
-    assert_equal_str(Suniq[5], "A")
-    assert_equal_str(Suniq[6], "C")
+    loop foreach i P
+        # Given
+        strings expected = P[i].expected
+        # When
+        strings actual = struniq_new(P[i].input, P[i].do_sort)
 
-    strings S = defarray("R1", "R2", "")
-    strings Suniq = struniq(S)
-    assert_false(nelem(Suniq))
-
-    strings S = defarray("R1", " ", "")
-    strings Suniq = struniq(S)
-    assert_false(nelem(Suniq))
+        # Then
+        assert(nelem(actual) == nelem(expected))
+        loop foreach j expected
+            printf "%s : %s\n", actual[j], "$j"
+            assert(actual[j] == "$j")
+        endloop
+    endloop
 end function
+test_struniq_noordering(Params)
+
+
+
+bundles Params = null
+Params = Params + _(input = defarray(""),
+                    do_sort = TRUE,
+                    expected = defarray(""))
+Params = Params + _(input = defarray("NZ", "AUS", "SAF", "AUS", "ENG", "SAF",
+                                     "NZ", "NZ", "SAF", "SAF"),
+                    do_sort = TRUE,
+                    expected = defarray("AUS", "ENG", "NZ", "SAF"))
+Params = Params + _(input = defarray("R1", "R2", "R3"),
+                    do_sort = TRUE,
+                    expected = defarray("R1", "R2", "R3"))
+Params = Params + _(input = defarray("R1", "R2", "R3", "R-1", "R2", "A", "A",
+                                     "C"),
+                    do_sort = TRUE,
+                    expected = defarray("R1", "R2", "R3", "R-1", "A", "C"))
+Params = Params + _(input = defarray("R2", "R1", ""),
+                    do_sort = TRUE,
+                    expected = defarray("R2", "R1", ""))
+
+function void test_struniq_wordering (const bundles P)
+    print "Start testing function struniq_new() with ordering."
+
+    loop foreach i P
+        # Given
+        strings expected = P[i].expected
+        # When
+        strings actual = struniq_new(P[i].input, P[i].do_sort)
+
+        # Then
+        assert(nelem(actual) == nelem(expected))
+        loop foreach j expected
+            printf "%s : %s\n", actual[j], "$j"
+            assert(actual[j] == "$j")
+        endloop
+    endloop
+end function
+test_struniq_wordering(Params)
+
 
 
 function void test_strrepl (void)
